@@ -1,111 +1,177 @@
 // -----------------------------------------------------------------------
-// OrangeHRM integration — ONE-WAY PUSH ONLY. This app never reads from
-// OrangeHRM or touches its Performance module; it only attaches a finished
-// review PDF to the right employee record once you click Send.
+// OrangeHRM integration -- real OAuth2 + PKCE, the way OrangeHRM 5.x
+// Starter actually wants external tools to authenticate (confirmed against
+// OrangeHRM's own API docs: api-starter-orangehrm.readme.io). This is NOT
+// the same as logging into the website like a browser -- it's a separate,
+// proper API auth flow.
 //
-// AUTH: the free/open-source edition of OrangeHRM doesn't have a separate
-// API-key/OAuth path for outside tools — its API is the same one the
-// browser calls, secured by a logged-in session cookie. So this logs in
-// exactly like a browser would (submits the login form, keeps the cookie),
-// then calls the same PIM attachment endpoint used for contractor
-// contracts.
-//
-// This has NOT been run against your live instance. Test with
-// ORANGEHRM_DRY_RUN=true first (default) — it logs/returns what it would
-// send without contacting OrangeHRM — then flip it off once verified.
-// If the login step fails on your instance, the most likely fix is the
-// `_csrf_token` field name below, which can vary slightly by OrangeHRM
-// point release.
+// ONE-TIME SETUP (see README):
+//   1. In OrangeHRM: Admin > Configuration > Register OAuth Client.
+//      Redirect URI must be exactly: <this app's URL>/oauth/callback
+//      Copy the Client ID it gives you into ORANGEHRM_CLIENT_ID.
+//   2. Visit <this app's URL>/oauth/start in your browser (while logged
+//      into OrangeHRM) and click "Allow Access" once.
+//   3. That's it -- tokens are saved to disk and refreshed automatically
+//      from then on. Pushing a review never needs a browser again.
 // -----------------------------------------------------------------------
 
-const BASE_URL = process.env.ORANGEHRM_BASE_URL || '';
-const USERNAME = process.env.ORANGEHRM_USERNAME || '';
-const PASSWORD = process.env.ORANGEHRM_PASSWORD || '';
+const crypto = require('crypto');
+const tokenStore = require('./tokenStore');
+
+const BASE_URL = (process.env.ORANGEHRM_BASE_URL || '').replace(/\/$/, '');
+const CLIENT_ID = process.env.ORANGEHRM_CLIENT_ID || '';
+const REDIRECT_URI = process.env.ORANGEHRM_REDIRECT_URI || '';
 const DRY_RUN = String(process.env.ORANGEHRM_DRY_RUN || 'true').toLowerCase() !== 'false';
 
 function isConfigured() {
-  return Boolean(BASE_URL && USERNAME && PASSWORD);
+  return Boolean(BASE_URL && CLIENT_ID && REDIRECT_URI);
 }
 
-function cookieHeaderFrom(setCookieValues) {
-  return setCookieValues.map((c) => c.split(';')[0]).join('; ');
+function base64url(buf) {
+  return buf.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-async function login() {
+// In-memory map of state -> code_verifier for the few seconds between
+// starting the OAuth flow and OrangeHRM redirecting back with the code.
+const pendingVerifiers = new Map();
+
+function buildAuthorizeUrl() {
   if (!isConfigured()) {
-    throw new Error('OrangeHRM is not configured. Set ORANGEHRM_BASE_URL, ORANGEHRM_USERNAME, ORANGEHRM_PASSWORD in .env');
+    throw new Error('Set ORANGEHRM_BASE_URL, ORANGEHRM_CLIENT_ID, and ORANGEHRM_REDIRECT_URI first.');
+  }
+  const verifier = base64url(crypto.randomBytes(64));
+  const challenge = base64url(crypto.createHash('sha256').update(verifier).digest());
+  const state = base64url(crypto.randomBytes(16));
+  pendingVerifiers.set(state, verifier);
+  // Clean up if it's never used (avoid an unbounded map on a long-running server)
+  setTimeout(() => pendingVerifiers.delete(state), 10 * 60 * 1000).unref?.();
+
+  const url = new URL(`${BASE_URL}/web/index.php/oauth2/authorize`);
+  url.searchParams.set('response_type', 'code');
+  url.searchParams.set('code_challenge_method', 'S256');
+  url.searchParams.set('code_challenge', challenge);
+  url.searchParams.set('client_id', CLIENT_ID);
+  url.searchParams.set('redirect_uri', REDIRECT_URI);
+  url.searchParams.set('state', state);
+  return url.toString();
+}
+
+async function handleCallback(code, state) {
+  const verifier = pendingVerifiers.get(state);
+  pendingVerifiers.delete(state);
+  if (!verifier) {
+    throw new Error("That authorization link expired or was already used -- go back to /oauth/start and try again.");
   }
 
-  const loginPageUrl = `${BASE_URL.replace(/\/$/, '')}/web/index.php/auth/login`;
+  const body = new URLSearchParams();
+  body.set('grant_type', 'authorization_code');
+  body.set('code', code);
+  body.set('client_id', CLIENT_ID);
+  body.set('redirect_uri', REDIRECT_URI);
+  body.set('code_verifier', verifier);
 
-  const getRes = await fetch(loginPageUrl);
-  const getCookies = getRes.headers.getSetCookie ? getRes.headers.getSetCookie() : [];
-  const html = await getRes.text();
-
-  const csrfMatch = html.match(/name=["']_csrf_token["']\s+value=["']([^"']+)["']/i);
-  const csrfToken = csrfMatch ? csrfMatch[1] : null;
-  const cookieHeader = cookieHeaderFrom(getCookies);
-
-  const form = new URLSearchParams();
-  form.set('username', USERNAME);
-  form.set('password', PASSWORD);
-  if (csrfToken) form.set('_csrf_token', csrfToken);
-
-  const postRes = await fetch(loginPageUrl, {
+  const res = await fetch(`${BASE_URL}/web/index.php/oauth2/token`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded', Cookie: cookieHeader },
-    body: form.toString(),
-    redirect: 'manual'
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString()
   });
 
-  const postCookies = postRes.headers.getSetCookie ? postRes.headers.getSetCookie() : [];
-  const finalCookieHeader = cookieHeaderFrom([...getCookies, ...postCookies]);
-
-  if (postRes.status !== 302 && postRes.status !== 200) {
-    throw new Error(`OrangeHRM login did not behave as expected (status ${postRes.status}). The login form may have changed.`);
+  const text = await res.text();
+  if (!res.ok) {
+    throw new Error(`OrangeHRM rejected the token exchange (HTTP ${res.status}): ${text.slice(0, 300)}`);
   }
 
-  return { cookieHeader: finalCookieHeader, csrfToken };
+  const json = JSON.parse(text);
+  tokenStore.write({
+    access_token: json.access_token,
+    refresh_token: json.refresh_token,
+    expires_at: Date.now() + (json.expires_in || 1800) * 1000
+  });
+  return json;
+}
+
+async function refreshAccessToken(refreshToken) {
+  const body = new URLSearchParams();
+  body.set('grant_type', 'refresh_token');
+  body.set('refresh_token', refreshToken);
+  body.set('client_id', CLIENT_ID);
+
+  const res = await fetch(`${BASE_URL}/web/index.php/oauth2/token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString()
+  });
+
+  const text = await res.text();
+  if (!res.ok) {
+    throw new Error(`OrangeHRM rejected the refresh request (HTTP ${res.status}): ${text.slice(0, 300)}`);
+  }
+
+  const json = JSON.parse(text);
+  const tokens = {
+    access_token: json.access_token,
+    refresh_token: json.refresh_token, // OrangeHRM issues a new one each refresh
+    expires_at: Date.now() + (json.expires_in || 1800) * 1000
+  };
+  tokenStore.write(tokens);
+  return tokens;
+}
+
+async function getValidAccessToken() {
+  const saved = tokenStore.read();
+  if (!saved) {
+    throw new Error('Not connected to OrangeHRM yet -- visit /oauth/start once to connect it, then try again.');
+  }
+  // Refresh a bit early (60s buffer) rather than right at the edge of expiry
+  if (Date.now() < saved.expires_at - 60000) {
+    return saved.access_token;
+  }
+  const refreshed = await refreshAccessToken(saved.refresh_token);
+  return refreshed.access_token;
 }
 
 /**
  * @param {object} opts
- * @param {string|number} opts.orangehrmEmployeeId
+ * @param {string|number} opts.orangehrmEmployeeId - the empNumber
  * @param {Buffer} opts.pdfBuffer
  * @param {string} opts.fileName
  * @param {string} opts.comment
  */
 async function pushReviewSummary({ orangehrmEmployeeId, pdfBuffer, fileName, comment }) {
   if (!orangehrmEmployeeId) {
-    return { ok: false, skipped: true, reason: 'No OrangeHRM Employee ID was entered on the form — add it and try again.' };
+    return { ok: false, skipped: true, reason: 'No OrangeHRM Employee ID was entered on the form -- add it and try again.' };
   }
 
   if (DRY_RUN) {
     return {
       ok: true,
       dryRun: true,
-      wouldSendTo: `${BASE_URL || '(set ORANGEHRM_BASE_URL)'}/web/index.php/api/v2/pim/employees/${orangehrmEmployeeId}/attachments`,
+      wouldSendTo: `${BASE_URL}/api/v2/pim/employees/${orangehrmEmployeeId}/screen/job/attachments`,
       fileName,
       comment
     };
   }
 
   try {
-    const { cookieHeader, csrfToken } = await login();
-    const endpoint = `${BASE_URL.replace(/\/$/, '')}/web/index.php/api/v2/pim/employees/${orangehrmEmployeeId}/attachments`;
+    const accessToken = await getValidAccessToken();
+    const endpoint = `${BASE_URL}/api/v2/pim/employees/${orangehrmEmployeeId}/screen/job/attachments`;
 
-    const body = {
-      employeeId: orangehrmEmployeeId,
-      fileName,
-      fileType: 'application/pdf',
-      comment,
-      attachment: pdfBuffer.toString('base64')
-    };
-
-    const headers = { 'Content-Type': 'application/json', Cookie: cookieHeader };
-    if (csrfToken) headers['X-CSRF-TOKEN'] = csrfToken;
-
-    const res = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(body) });
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: JSON.stringify({
+        description: comment,
+        attachment: {
+          name: fileName,
+          type: 'application/pdf',
+          base64: pdfBuffer.toString('base64'),
+          size: pdfBuffer.length
+        }
+      })
+    });
 
     if (!res.ok) {
       const text = await res.text().catch(() => '');
@@ -118,4 +184,4 @@ async function pushReviewSummary({ orangehrmEmployeeId, pdfBuffer, fileName, com
   }
 }
 
-module.exports = { isConfigured, pushReviewSummary, DRY_RUN };
+module.exports = { isConfigured, pushReviewSummary, buildAuthorizeUrl, handleCallback, DRY_RUN, isConnected: () => Boolean(tokenStore.read()) };
