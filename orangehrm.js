@@ -146,7 +146,7 @@ async function pushReviewSummary({ orangehrmEmployeeId, pdfBuffer, fileName, com
     return {
       ok: true,
       dryRun: true,
-      wouldSendTo: `${BASE_URL}/api/v2/pim/employees/${orangehrmEmployeeId}/screen/job/attachments`,
+      wouldSendTo: `${BASE_URL}/web/index.php/api/v2/pim/employees/${orangehrmEmployeeId}/screen/job/attachments`,
       fileName,
       comment
     };
@@ -154,7 +154,7 @@ async function pushReviewSummary({ orangehrmEmployeeId, pdfBuffer, fileName, com
 
   try {
     const accessToken = await getValidAccessToken();
-    const endpoint = `${BASE_URL}/api/v2/pim/employees/${orangehrmEmployeeId}/screen/job/attachments`;
+    const endpoint = `${BASE_URL}/web/index.php/api/v2/pim/employees/${orangehrmEmployeeId}/screen/job/attachments`;
 
     const res = await fetch(endpoint, {
       method: 'POST',
