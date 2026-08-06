@@ -184,4 +184,4 @@ async function pushReviewSummary({ orangehrmEmployeeId, pdfBuffer, fileName, com
   }
 }
 
-module.exports = { isConfigured, pushReviewSummary, buildAuthorizeUrl, handleCallback, DRY_RUN, isConnected: () => Boolean(tokenStore.read()) };
+module.exports = { isConfigured, pushReviewSummary, buildAuthorizeUrl, handleCallback, DRY_RUN, isConnected: () => Boolean(tokenStore.read()), getValidAccessToken };
