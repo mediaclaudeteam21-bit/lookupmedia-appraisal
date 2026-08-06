@@ -12,13 +12,13 @@
 // Safe to run more than once -- it skips any Job Title that already has
 // a KPI, so re-running just confirms everything is already set up.
 
-const tokenStore = require('./tokenStore');
+const { getValidAccessToken } = require('./orangehrm');
 
 const BASE_URL = (process.env.ORANGEHRM_BASE_URL || '').replace(/\/$/, '');
 const KPI_TITLE = '360 Performance Rating';
 
 async function apiGet(path) {
-  const accessToken = await tokenStore.getValidAccessToken();
+  const accessToken = await getValidAccessToken();
   const res = await fetch(`${BASE_URL}/web/index.php${path}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -30,7 +30,7 @@ async function apiGet(path) {
 }
 
 async function apiPost(path, body) {
-  const accessToken = await tokenStore.getValidAccessToken();
+  const accessToken = await getValidAccessToken();
   const res = await fetch(`${BASE_URL}/web/index.php${path}`, {
     method: 'POST',
     headers: {
