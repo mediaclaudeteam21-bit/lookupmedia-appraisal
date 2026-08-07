@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LookUp Media LLC — Performance Appraisal</title>
+<title>Look Up Media LLC — Performance Review (Multi-Rater)</title>
 <style>
   :root{
     --bg:#0f172a; --panel:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0;
@@ -16,26 +16,34 @@
   header{background:linear-gradient(135deg,#1e1b4b,#312e81);color:#fff;padding:22px 28px}
   header .brand{font-size:20px;font-weight:700;letter-spacing:.2px}
   header .sub{font-size:13px;opacity:.8;margin-top:2px}
-  .wrap{max-width:960px;margin:0 auto;padding:24px 20px 80px}
+  .wrap{max-width:980px;margin:0 auto;padding:24px 20px 80px}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:20px;
     box-shadow:0 1px 2px rgba(15,23,42,.04)}
   h2{font-size:15px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0 0 16px}
   label{display:block;font-size:13px;font-weight:600;margin:0 0 5px;color:#334155}
-  input[type=text],select,textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;
+  input[type=text],input[type=number],select,textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;
     font-size:14px;font-family:inherit;background:#fff;color:var(--ink)}
   textarea{resize:vertical;min-height:60px}
   .grid{display:grid;gap:14px}
   .g2{grid-template-columns:1fr 1fr}
-  .g3{grid-template-columns:1fr 1fr 1fr}
-  @media(max-width:640px){.g2,.g3{grid-template-columns:1fr}}
-  .scale{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-  .scale .pill{flex:1;min-width:120px;background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12px}
-  .scale b{display:block;font-size:13px}
+  @media(max-width:640px){.g2{grid-template-columns:1fr}}
+
+  /* Rating scale table — mirrors Section 3 of the HR guide */
+  table.tbl{width:100%;border-collapse:collapse;font-size:13px}
+  table.tbl th,table.tbl td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.tbl th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);background:var(--soft)}
+  table.tbl td.num{font-weight:800;font-size:16px;text-align:center;width:44px}
+  table.tbl td.lab{font-weight:700;white-space:nowrap}
+  table.tbl td.act{font-style:italic;color:#475569;white-space:nowrap}
+  .r5{color:#166534}.r4{color:#15803d}.r3{color:#3730a3}.r2{color:#b45309}.r1{color:#b91c1c}
+  .callout{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px;font-size:13px;margin-top:14px}
+  .callout b{color:#92400e}
+
   .crit{border:1px solid var(--line);border-radius:11px;padding:14px;margin-bottom:12px;background:#fff}
   .crit .txt{font-size:14px;font-weight:600;margin-bottom:10px}
-  .crit .tag{display:inline-block;font-size:10px;font-weight:700;color:#7c3aed;background:#ede9fe;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle}
-  .ratings{display:grid;grid-template-columns:1fr 1fr 2fr;gap:10px;align-items:end}
-  @media(max-width:640px){.ratings{grid-template-columns:1fr 1fr}.ratings .note{grid-column:1/-1}}
+  .crit .tag{display:inline-block;font-size:10px;font-weight:700;color:#7c3aed;background:#ede9fe;border-radius:6px;padding:2px 7px;margin-right:6px;vertical-align:middle}
+  .ratings{display:grid;grid-template-columns:210px 1fr;gap:10px;align-items:end}
+  @media(max-width:640px){.ratings{grid-template-columns:1fr}}
   .mini{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
   .btn{appearance:none;border:0;border-radius:10px;padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer}
   .btn.primary{background:var(--accent);color:#fff}
@@ -43,18 +51,29 @@
   .btn.ghost{background:#fff;border:1px solid var(--line);color:#334155}
   .btn.ghost:hover{background:var(--soft)}
   .bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
-  .overall{display:flex;align-items:center;gap:16px;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .overall{display:flex;align-items:center;gap:16px;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:16px;flex-wrap:wrap}
   .score{font-size:34px;font-weight:800;line-height:1}
   .score small{font-size:15px;color:var(--muted);font-weight:600}
-  .flag{font-size:12px;font-weight:700;border-radius:8px;padding:5px 10px}
+  .flag{font-size:12px;font-weight:700;border-radius:8px;padding:5px 10px;display:inline-block}
   .flag.rec{background:#dcfce7;color:#166534}
   .flag.pip{background:#fee2e2;color:#991b1b}
   .flag.ok{background:#e0e7ff;color:#3730a3}
+  .flag.warn{background:#fef3c7;color:#92400e}
   .hint{font-size:12px;color:var(--muted);margin-top:4px}
   .apiNote{font-size:12px;color:#3730a3;background:#eef2ff;border:1px dashed #c7d2fe;border-radius:9px;padding:10px 12px;margin-top:10px}
+  .anonNote{font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:9px;padding:10px 12px;margin-bottom:14px}
   #summaryOut{display:none}
   .sumline{padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
   .sumline .k{font-weight:700;color:#334155}
+  .who{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;background:var(--soft);
+    border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px}
+  .who .arrow{font-size:20px;color:var(--accent);font-weight:700}
+  @media(max-width:640px){.who{grid-template-columns:1fr}.who .arrow{text-align:center}}
+  .wt{display:grid;grid-template-columns:1fr 100px 100px;gap:10px;align-items:end;margin-bottom:10px}
+  @media(max-width:640px){.wt{grid-template-columns:1fr 1fr}}
+  details{border:1px solid var(--line);border-radius:11px;padding:12px 14px;background:#fff}
+  details summary{cursor:pointer;font-weight:700;font-size:14px;color:#334155}
+  details[open] summary{margin-bottom:10px}
   @media print{
     header{background:#312e81 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
     .noprint{display:none !important}
@@ -64,32 +83,119 @@
 </head>
 <body>
 <header>
-  <div class="brand">LookUp Media LLC — Performance Appraisal</div>
-  <div class="sub">Human Resources Department · Confidential</div>
+  <div class="brand">Look Up Media LLC — Performance Review</div>
+  <div class="sub">Multi-rater form · Human Resources Department · Confidential</div>
 </header>
 
 <div class="wrap">
 
-  <!-- Rating scale reference -->
+  <!-- Who reviews whom -->
   <div class="card noprint">
-    <h2>Rating Scale (1–5)</h2>
-    <div class="scale">
-      <div class="pill"><b>5 · Outstanding</b>Consistently exceeds all expectations.</div>
-      <div class="pill"><b>4 · Exceeds</b>Regularly goes beyond what's required.</div>
-      <div class="pill"><b>3 · Meets</b>Delivers required output on time & to standard.</div>
-      <div class="pill"><b>2 · Needs Improvement</b>Inconsistent; misses deadlines/quality.</div>
-      <div class="pill"><b>1 · Unsatisfactory</b>Fails to meet basic expectations.</div>
-    </div>
-    <div class="hint">A rating of 3 is a good rating — it means the contractor is doing exactly what they were hired to do. Reserve 4s and 5s for genuine, evidence-backed exceptional performance.</div>
+    <h2>Who reviews whom</h2>
+    <p style="margin:0 0 12px;font-size:14px">Nobody rates themselves. Every person is rated by <b>at least three other people</b>, from different directions. Each rater fills this form in once, about one person.</p>
+    <table class="tbl">
+      <tr><th>Review type</th><th>Who fills it in</th><th>What it measures</th><th>Minimum</th></tr>
+      <tr>
+        <td><b>Lead → Member</b></td>
+        <td>The member's Channel Manager or Lead</td>
+        <td>The full role scorecard from Section 6 of the HR guide — output, quality, deadlines</td>
+        <td>1 per member</td>
+      </tr>
+      <tr>
+        <td><b>Member → Member</b><br><span class="hint">Peer review</span></td>
+        <td>2–3 teammates in the same pipeline</td>
+        <td>How they are to work with — handoffs, reliability, communication</td>
+        <td>2 per member</td>
+      </tr>
+      <tr>
+        <td><b>Member → Lead</b><br><span class="hint">Upward review</span></td>
+        <td>Every member reporting to that Lead</td>
+        <td>Leadership — brief clarity, availability, fairness, follow-through</td>
+        <td>3 per lead</td>
+      </tr>
+    </table>
+    <div class="hint" style="margin-top:12px">Leads are rated by their own reviewer too, so a Channel Manager receives a Lead → Member scorecard from Cenri or Luka, upward reviews from their team, and peer reviews from the other CMs. Partnership contractors (Barbara's and Leo's teams) are reviewed by their partner, per Section 5 of the guide.</div>
   </div>
 
-  <!-- Header details -->
+  <!-- Rating scale — full Section 3 table -->
+  <div class="card noprint">
+    <h2>Section 3 — Rating Scale</h2>
+    <p style="margin:0 0 14px;font-size:14px">All reviewers must use this standardised 5-point scale consistently across every assessment. Do not apply personal interpretation to the scale — use the descriptions below as the reference point.</p>
+    <table class="tbl">
+      <tr><th>Rating</th><th>Label</th><th>Description</th><th>Action</th></tr>
+      <tr>
+        <td class="num r5">5</td><td class="lab r5">Outstanding</td>
+        <td>Consistently exceeds all expectations. Exceptional quality, reliability, and impact. Sets the standard for others.</td>
+        <td class="act">Recognition + bonus consideration</td>
+      </tr>
+      <tr>
+        <td class="num r4">4</td><td class="lab r4">Exceeds Expectations</td>
+        <td>Regularly goes beyond what is required. Strong performer who delivers quality work ahead of deadlines.</td>
+        <td class="act">Recognition</td>
+      </tr>
+      <tr>
+        <td class="num r3">3</td><td class="lab r3">Meets Expectations</td>
+        <td>Consistently delivers required output on time and to standard. Reliable and dependable.</td>
+        <td class="act">Continue + set growth goals</td>
+      </tr>
+      <tr>
+        <td class="num r2">2</td><td class="lab r2">Needs Improvement</td>
+        <td>Inconsistent delivery. Misses deadlines or quality standards regularly. Requires coaching.</td>
+        <td class="act">Performance Improvement Plan</td>
+      </tr>
+      <tr>
+        <td class="num r1">1</td><td class="lab r1">Unsatisfactory</td>
+        <td>Fails to meet basic expectations. Persistent issues unresolved after support.</td>
+        <td class="act">Contract review / termination</td>
+      </tr>
+    </table>
+    <div class="callout">
+      <b>Important note on ratings.</b> A rating of 3 (Meets Expectations) is a GOOD rating — it means the contractor is doing exactly what they were hired to do. Not everyone needs to be a 4 or 5. Reserve 4s and 5s for genuine exceptional performance backed by specific evidence. Never give a 5 just to be nice — it dilutes the meaning for those who truly earn it.
+    </div>
+    <div class="hint" style="margin-top:10px">Leave a criterion on <b>N/A</b> if you have not worked with the person closely enough to judge it honestly. A blank is more useful than a guess.</div>
+  </div>
+
+  <!-- Rating errors — Section 5 -->
+  <div class="card noprint">
+    <details>
+      <summary>Before you rate — the five common rating errors (Section 5)</summary>
+      <table class="tbl">
+        <tr><th>Error</th><th>What it looks like</th><th>How to avoid it</th></tr>
+        <tr><td><b>Leniency</b></td><td>Everyone on the team gets 4s and 5s. Nobody is rated below 3.</td><td>Justify each rating with a specific example. If you can't, lower it.</td></tr>
+        <tr><td><b>Halo effect</b></td><td>Someone you like scores high across ALL criteria, even where evidence is weak.</td><td>Rate each criterion on its own. One strength doesn't carry the rest.</td></tr>
+        <tr><td><b>Recency bias</b></td><td>Your ratings reflect only the last 2–4 weeks, not the full period.</td><td>Deliberately recall events from the start of the review period.</td></tr>
+        <tr><td><b>Central tendency</b></td><td>Everyone gets exactly 3 on everything. No variation at all.</td><td>Very few people are identical in every area. Differentiate honestly.</td></tr>
+        <tr><td><b>Personal bias</b></td><td>People you're friendly with score higher regardless of output.</td><td>Rate the work, not the friendship. HR checks for this pattern across raters.</td></tr>
+      </table>
+      <div class="hint" style="margin-top:10px">These matter more in peer review than anywhere else. HR reviews all submissions for these patterns before any of it is used in a feedback session.</div>
+    </details>
+  </div>
+
+  <!-- Who is reviewing whom -->
   <div class="card">
-    <h2>Review Details</h2>
+    <h2>This review</h2>
+
+    <div><label>Review type</label>
+      <select id="f_type" onchange="renderCriteria()">
+        <option value="">— Select review type —</option>
+        <option value="lead_member">Lead → Member (CM or Lead reviews their team member)</option>
+        <option value="peer">Member → Member (peer review)</option>
+        <option value="member_lead">Member → Lead (upward review)</option>
+      </select>
+      <div class="hint" id="typeHint">The review type decides which criteria you'll be asked to rate.</div>
+    </div>
+
+    <div class="who" style="margin-top:16px">
+      <div><label id="lbl_reviewer">Reviewer (you)</label><input type="text" id="f_reviewer" placeholder="Your full name"></div>
+      <div class="arrow">→</div>
+      <div><label id="lbl_subject">Person being reviewed</label>
+        <select id="f_emp" onchange="pickedEmployee()" style="display:none"><option value="">— Select person —</option></select>
+        <input type="text" id="f_name" placeholder="Full name">
+        <div class="hint" id="empHint"></div></div>
+    </div>
+
     <div class="grid g2">
-      <div><label>Contractor Name</label><input type="text" id="f_name" placeholder="Full name"></div>
-      <div><label>OrangeHRM Employee ID <span style="font-weight:400;text-transform:none;color:var(--muted)">(needed to push — find it in their OrangeHRM record URL)</span></label><input type="text" id="f_orangehrmId" placeholder="e.g. 48"></div>
-      <div><label>Role</label>
+      <div id="roleWrap"><label id="lbl_role">Role of the person being reviewed</label>
         <select id="f_role" onchange="renderCriteria()">
           <option value="">— Select role —</option>
           <option value="ideator">Ideator</option>
@@ -100,12 +206,21 @@
           <option value="cm">Channel Manager</option>
           <option value="qa">Quality Analyst</option>
         </select>
+        <div class="hint" id="roleHint">Multi-role contractors get one form per major role — see Step 08 of the guide.</div>
       </div>
-      <div><label>Assigned Channel(s)</label><input type="text" id="f_channel" placeholder="e.g. History, Food/Dish"></div>
-      <div><label>Reviewer (CM / Lead)</label><input type="text" id="f_reviewer" placeholder="Reviewing manager"></div>
-      <div><label>Review Period</label><input type="text" id="f_period" placeholder="e.g. Q3 2026 (Jul–Sep)"></div>
+      <div><label>Assigned Channel(s) / Niche</label><input type="text" id="f_channel" placeholder="e.g. History, Food/Dish"></div>
+      <div><label>Review Period</label><input type="text" id="f_period" placeholder="e.g. Q3 2026 (Jul–Sep)" readonly>
+        <div class="hint" id="cycleHint">Set by HR when the review round opens.</div></div>
+      <div><label>How closely do you work with this person?</label>
+        <select id="f_contact">
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Occasionally">Occasionally</option>
+          <option value="Rarely">Rarely — I may not be the right rater</option>
+        </select>
+      </div>
       <div id="editorTypeWrap" style="display:none"><label>Editor Type</label>
-        <select id="f_editortype"><option value="Full">Full</option><option value="Half">Half</option></select>
+        <select id="f_editortype" onchange="renderCriteria()"><option value="Full">Full</option><option value="Half">Half</option></select>
       </div>
     </div>
   </div>
@@ -113,142 +228,212 @@
   <!-- Criteria -->
   <div class="card" id="criteriaCard" style="display:none">
     <h2 id="criteriaTitle">Review Criteria</h2>
+    <div class="anonNote" id="anonNote" style="display:none"></div>
     <div id="criteriaList"></div>
     <div class="overall">
       <div class="score" id="overallScore">—<small>/5</small></div>
       <div>
-        <div class="mini">Overall rating (avg of manager ratings)</div>
+        <div class="mini" id="overallLabel">Your rating of this person</div>
         <div id="overallFlags"><span class="flag ok">Fill in ratings to calculate</span></div>
       </div>
     </div>
+    <div class="hint" style="margin-top:10px">This is one rater's average. The person's final rating is the weighted blend of every review they receive — see the panel at the bottom.</div>
   </div>
 
   <!-- Summary -->
   <div class="card" id="summaryCard" style="display:none">
     <h2>Review Summary</h2>
     <div class="grid">
-      <div><label>Greatest Strength Observed This Period</label><textarea id="s_strength"></textarea></div>
-      <div><label>Primary Area for Improvement</label><textarea id="s_improve"></textarea></div>
-      <div><label>Specific Action Plan / Goal for Next Period</label><textarea id="s_goal"></textarea></div>
-      <div class="grid g2">
+      <div><label id="lbl_strength">Greatest Strength Observed This Period</label><textarea id="s_strength" placeholder="Give a specific example, not a general compliment."></textarea></div>
+      <div><label id="lbl_improve">Primary Area for Improvement</label><textarea id="s_improve" placeholder="Describe the behaviour and its effect on the work."></textarea></div>
+      <div id="goalWrap"><label>Specific Action Plan / Goal for Next Review Period</label><textarea id="s_goal" placeholder="2–3 clear, specific, measurable goals."></textarea></div>
+      <div class="grid g2" id="decisionWrap">
         <div><label>Recommended for Recognition?</label>
           <select id="s_rec"><option>No</option><option>Yes</option></select></div>
-        <div><label>Recommended for PIP?</label>
+        <div><label>Recommended for Performance Improvement Plan (PIP)?</label>
           <select id="s_pip"><option>No</option><option>Yes</option></select></div>
       </div>
       <div><label>Additional Comments</label><textarea id="s_comments"></textarea></div>
     </div>
     <div class="bar noprint">
-      <button class="btn primary" onclick="generate()">Generate Review</button>
+      <button class="btn primary" id="submitBtn" onclick="submitReview()">Submit review</button>
       <button class="btn ghost" onclick="window.print()">Print / Save PDF</button>
       <button class="btn ghost" onclick="downloadJSON()">Download data (JSON)</button>
     </div>
-    <div class="apiNote noprint">🔌 When you click <b>Send to OrangeHRM</b> below, this page sends the final rating, review period, and summary PDF to the small server running alongside it, which logs into OrangeHRM and attaches it to the employee's record. Starts in safe "dry run" mode — see the README.</div>
+    <div class="apiNote noprint">🔒 Your answers go to HR only. Individual reviews stay on this site. Once the minimum number of raters have submitted, HR blends them into one final rating, and only that final rating and its KPI breakdown go to OrangeHRM.</div>
   </div>
 
   <!-- Generated output -->
   <div class="card" id="summaryOut">
-    <h2>Finalized Review</h2>
+    <h2>Submitted Review</h2>
     <div id="outBody"></div>
-    <div class="bar noprint" style="margin-top:14px">
-      <button class="btn primary" id="sendBtn" onclick="sendToOrangeHRM()">▶ Send to OrangeHRM</button>
-    </div>
     <div id="sendMsg" class="apiNote noprint" style="display:none"></div>
+    <div class="bar noprint" style="margin-top:14px">
+      <button class="btn ghost" onclick="window.print()">Print / Save PDF</button>
+      <button class="btn ghost" onclick="location.reload()">Review someone else</button>
+    </div>
+  </div>
+
+  <!-- What happens next -->
+  <div class="card noprint">
+    <h2>What happens after you submit</h2>
+    <p style="margin:0 0 10px;font-size:14px">Your review is one input of several. HR collects every review this person receives, then blends them:
+      the lead's scorecard at <b>60%</b>, the peer average at <b>25%</b>, and the upward average at <b>15%</b>. If a group doesn't apply,
+      the weights re-balance automatically.</p>
+    <div class="hint">Nobody is finalised on fewer than three raters. Peer and upward comments stay sealed until at least three people
+      in that group have answered — below that the feedback is identifiable. Once a person's set is complete, HR sends the final rating
+      and its KPI breakdown to OrangeHRM.</div>
   </div>
 
 </div>
 
 <script>
-// ---- Role criteria (from LookUp Media performance review guide) ----
-const CRITERIA = {
-  ideator:{title:"Ideator — Review Criteria",items:[
-    "Quantity of content ideas submitted — meets or exceeds the required minimum",
-    "Quality of ideas — original, niche-appropriate, and audience-relevant",
-    "Research quality — briefs include accurate, credible, usable source materials",
-    "Trend awareness — reflects current niche trends, seasonal & algorithm patterns",
-    "Title & hook quality — proposed titles/hooks are click-worthy and competitive",
-    "Timeliness — submitted before scriptwriting deadline without chasing",
-    "Collaboration — clear communication with CM & scriptwriter; responds to feedback"]},
-  scriptwriter:{title:"Scriptwriter — Review Criteria",items:[
-    "Script output — meets/exceeds required number of completed scripts",
-    "Hook quality — strong opening hooks that retain attention in the first 30s",
-    "Script structure — clear arc, logical flow, effective re-hooks, strong CTA",
-    "Tone & niche alignment — style matches the channel's voice and audience",
-    "Factual accuracy — claims cited; no misinformation or unverified statistics",
-    "Word count accuracy — scripts hit target length for assigned duration",
-    "Revision responsiveness — accurate revisions within agreed turnaround",
-    "Collaboration — clear with Ideator, CM & editor; accepts feedback professionally"]},
-  thumbnail:{title:"Thumbnail Creator — Review Criteria",items:[
-    "Design quality — visually striking, professional, click-optimised",
-    "Niche alignment — matches tone and visual style of the assigned channel",
-    "CTR performance — competitive click-through rates (where data is available)",
-    "Technical compliance — correct specs (1280×720px, correct format & size)",
-    "A/B testing delivery — alternate versions submitted with every primary thumbnail",
-    "Timeliness — delivered before upload deadline with no pipeline delays",
-    "Revision responsiveness — corrections applied accurately & promptly",
-    "Asset management — source files saved correctly in the designated folder"]},
-  editor:{title:"Video Editor — Review Criteria",items:[
-    "Edit quality — well-paced, clean, engaging; no technical errors or gaps",
-    "Audio quality — voiceover & music balanced correctly; no sync errors",
-    "B-roll accuracy — footage matches narration; no mismatched visuals",
-    "Style guide compliance — fonts, colours, transitions, overlays applied consistently",
-    {t:"Map/graphic quality — custom map animations & motion graphics accurate", full:true},
-    "Export spec compliance — correct resolution, format, and bitrate every time",
-    "Self-review quality — catches errors before QA (fewer QA flags = better)",
-    "Timeliness — edits submitted to QA by the agreed deadline",
-    "Revision quality — QA/CM feedback applied completely; no repeat errors"]},
-  uploader:{title:"Uploader — Review Criteria",items:[
-    "Upload accuracy — videos uploaded to the correct channel; no wrong-channel errors",
-    "Metadata accuracy — titles, descriptions & tags applied correctly & completely",
-    "Thumbnail accuracy — correct thumbnail applied and verified before submission",
-    "Schedule adherence — uploaded on time per the content calendar",
-    "Upload log maintenance — kept up to date and submitted on schedule",
-    "Error reporting — failures/access issues/policy flags reported immediately",
-    "Credential compliance — access only through approved system; no unauthorised sharing"]},
-  cm:{title:"Channel Manager — Review Criteria",items:[
-    "Pipeline management — calendar maintained; all stages completed on schedule",
-    "Team coordination — clear briefs, deadlines & expectations; no preventable delays",
-    "Quality oversight — script/thumbnail/video reviews before handoff",
-    "Escalation handling — addressed at CM level; escalations well-documented",
-    "Channel performance — upload frequency & metrics maintained or improved",
-    "Communication quality — responsive, clear, professional; constructive not reactive",
-    "Upload package delivery — complete, labelled packages with no missing assets",
-    "Contractor development — identifies who needs support or recognition"]},
-  qa:{title:"Quality Analyst — Review Criteria",items:[
-    "Review thoroughness — every video reviewed end-to-end; no missed errors",
-    "Review turnaround — completed within timeframe; no schedule delays from QA",
-    "Feedback quality — specific, actionable, references timestamps/sections",
-    "YouTube policy compliance — zero violations in content that passed QA",
-    "Script & thumbnail review — reviewed for accuracy & compliance before production",
-    "QA log maintenance — updated after every review and submitted on schedule",
-    "Recurring issue reporting — patterns identified and escalated for improvement",
-    "Zero post-publish errors — nothing that passed QA required correction/removal"]}
+// ---------------------------------------------------------------------------
+// The scorecards, the peer set, the upward set and the rating scale all come
+// from the server (shared/criteria.json). One copy, used by this form, by the
+// summary PDF, and by the KPIs created inside OrangeHRM — so they can never
+// drift apart.
+// ---------------------------------------------------------------------------
+
+let DEF = null;          // criteria.json
+let CTX = { cycle:null, roster:[] };
+let currentItems = [];
+let currentType = '';
+let SCALE = {};
+
+const TYPES = {
+  lead_member:{
+    reviewer:"Reviewer (you — their CM or Lead)", subject:"Team member being reviewed",
+    role:"Role of the person being reviewed", roleNeeded:true,
+    strength:"Greatest Strength Observed This Period", improve:"Primary Area for Improvement",
+    goal:true, decision:true, anon:"",
+    scoreLabel:"Overall Rating (average of all criteria)"
+  },
+  peer:{
+    reviewer:"Reviewer (you)", subject:"Teammate you are reviewing",
+    role:"Their role (for context)", roleNeeded:false,
+    strength:"What do they do well that helps you do your job?",
+    improve:"What one thing would make working with them easier?",
+    goal:false, decision:false,
+    anon:"🔒 <b>Your name is not shown to this person.</b> Peer feedback is pooled with everyone else's and released as an average with the comments mixed together. Answer honestly — and rate the work, not the friendship.",
+    scoreLabel:"Your peer rating (average of all criteria)"
+  },
+  member_lead:{
+    reviewer:"Reviewer (you)", subject:"Lead you are reviewing",
+    role:"Their role (for context)", roleNeeded:false,
+    strength:"What does this lead do well?",
+    improve:"What would you ask this lead to change?",
+    goal:false, decision:false,
+    anon:"🔒 <b>Your name is not shown to your lead.</b> Upward reviews are only released once at least three people on the team have answered, and the comments are pooled so nothing traces back to one person.",
+    scoreLabel:"Your upward rating (average of all criteria)"
+  }
 };
 
-let currentItems = [];
+async function boot(){
+  try{
+    const [defRes, ctxRes] = await Promise.all([fetch('/api/criteria'), fetch('/api/context')]);
+    DEF = await defRes.json();
+    CTX = await ctxRes.json();
+    SCALE = DEF.scale;
+  }catch(err){
+    document.querySelector('.wrap').insertAdjacentHTML('afterbegin',
+      `<div class="card"><h2>This page isn't connected</h2><p style="font-size:14px;margin:0">
+       It can't reach the appraisal server, so nothing you fill in would be saved. Open it from the address HR gave you
+       rather than as a file on your computer, then reload.</p></div>`);
+    return;
+  }
+
+  // Review period is whatever cycle HR has open.
+  const period = document.getElementById('f_period');
+  if(CTX.cycle){
+    period.value = CTX.cycle.name;
+    document.getElementById('cycleHint').textContent = `${CTX.cycle.startDate} to ${CTX.cycle.endDate}`;
+  } else {
+    period.value = '';
+    period.removeAttribute('readonly');
+    document.getElementById('cycleHint').innerHTML =
+      '<b>No review round is open.</b> HR opens one in the console — until then your review can\u2019t be saved.';
+  }
+
+  // If OrangeHRM's staff list has been synced, pick people from it so their
+  // review lands on the right employee record. Otherwise fall back to typing.
+  const sel = document.getElementById('f_emp');
+  const free = document.getElementById('f_name');
+  if(CTX.roster && CTX.roster.length){
+    sel.innerHTML = '<option value="">— Select person —</option>' +
+      CTX.roster.map(p=>`<option value="${p.empNumber}" data-name="${escapeAttr(p.name)}">${escapeHtml(p.name)}${p.jobTitle?' · '+escapeHtml(p.jobTitle):''}</option>`).join('');
+    sel.style.display='block';
+    free.style.display='none';
+  } else {
+    document.getElementById('empHint').textContent = 'Type the name exactly as it appears in OrangeHRM.';
+  }
+}
+
+function pickedEmployee(){
+  const sel=document.getElementById('f_emp');
+  const opt=sel.selectedOptions[0];
+  document.getElementById('f_name').value = opt && opt.value ? opt.dataset.name : '';
+  const hint=document.getElementById('empHint');
+  hint.textContent = opt && opt.value ? 'Linked to their OrangeHRM record.' : '';
+}
+
+const escapeHtml = s => String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const escapeAttr = s => String(s).replace(/"/g,'&quot;');
 
 function renderCriteria(){
+  if(!DEF) return;
+  const type = document.getElementById('f_type').value;
   const role = document.getElementById('f_role').value;
-  document.getElementById('editorTypeWrap').style.display = role==='editor' ? 'block':'none';
+  currentType = type;
   const card = document.getElementById('criteriaCard');
-  const sum = document.getElementById('summaryCard');
-  if(!role){card.style.display='none';sum.style.display='none';return;}
-  const def = CRITERIA[role];
+  const sum  = document.getElementById('summaryCard');
+
+  if(!type){ card.style.display='none'; sum.style.display='none'; return; }
+  const t = TYPES[type];
+
+  document.getElementById('lbl_reviewer').textContent = t.reviewer;
+  document.getElementById('lbl_subject').textContent  = t.subject;
+  document.getElementById('lbl_role').textContent     = t.role;
+  document.getElementById('lbl_strength').textContent = t.strength;
+  document.getElementById('lbl_improve').textContent  = t.improve;
+  document.getElementById('goalWrap').style.display     = t.goal ? 'block':'none';
+  document.getElementById('decisionWrap').style.display = t.decision ? 'grid':'none';
+  document.getElementById('editorTypeWrap').style.display = (type==='lead_member' && role==='editor') ? 'block':'none';
+  document.getElementById('overallLabel').textContent = t.scoreLabel;
+  document.getElementById('roleHint').style.display = t.roleNeeded ? 'block':'none';
+
+  const anon = document.getElementById('anonNote');
+  if(t.anon){ anon.innerHTML=t.anon; anon.style.display='block'; } else { anon.style.display='none'; }
+
+  let def;
+  if(type==='lead_member'){
+    if(!role){
+      document.getElementById('typeHint').textContent='Now pick the team member\u2019s role to load their scorecard.';
+      card.style.display='none'; sum.style.display='none'; return;
+    }
+    def = DEF.roles[role];
+  } else if(type==='peer'){
+    def = DEF.peer;
+  } else {
+    def = DEF.upward;
+  }
+  document.getElementById('typeHint').textContent='The review type decides which criteria you\u2019ll be asked to rate.';
+
+  const halfEditor = (type==='lead_member' && role==='editor' && document.getElementById('f_editortype').value==='Half');
+
   document.getElementById('criteriaTitle').textContent = def.title;
   currentItems = def.items;
   const list = document.getElementById('criteriaList');
   list.innerHTML = '';
   def.items.forEach((it,i)=>{
-    const text = typeof it==='string'? it : it.t;
-    const isFull = typeof it==='object' && it.full;
+    const isFull = !!it.fullEditorsOnly;
     const div = document.createElement('div');
     div.className='crit';
     div.innerHTML = `
-      <div class="txt">${i+1}. ${text}${isFull?'<span class="tag">FULL EDITORS ONLY</span>':''}</div>
+      <div class="txt">${isFull?'<span class="tag">FULL EDITORS ONLY</span>':''}${i+1}. ${escapeHtml(it.text)}</div>
       <div class="ratings">
-        <div><div class="mini">Self rating</div>${sel('self_'+i)}</div>
-        <div><div class="mini">Manager rating</div>${sel('mgr_'+i,true)}</div>
-        <div class="note"><div class="mini">Notes / evidence</div><input type="text" id="note_${i}" placeholder="Specific example…"></div>
+        <div><div class="mini">Rating</div>${sel('r_'+i, isFull && halfEditor)}</div>
+        <div class="note"><div class="mini">Notes / evidence</div><input type="text" id="note_${i}" placeholder="Specific example from this period…"></div>
       </div>`;
     list.appendChild(div);
   });
@@ -257,97 +442,128 @@ function renderCriteria(){
   calc();
 }
 
-function sel(id,isMgr){
-  let o='<option value="">–</option>';
-  for(let n=5;n>=1;n--) o+=`<option value="${n}">${n}</option>`;
-  return `<select id="${id}" ${isMgr?'onchange="calc()"':''}>${o}</select>`;
+function sel(id, forceNA){
+  let o='<option value="">– select –</option>';
+  for(let n=5;n>=1;n--) o+=`<option value="${n}">${n} — ${SCALE[n].label}</option>`;
+  o+=`<option value="NA"${forceNA?' selected':''}>N/A — not applicable</option>`;
+  return `<select id="${id}" onchange="calc()">${o}</select>`;
 }
 
 function calc(){
   let sum=0,cnt=0;
   currentItems.forEach((it,i)=>{
-    const v=document.getElementById('mgr_'+i);
-    if(v && v.value){sum+=+v.value;cnt++;}
+    const v=document.getElementById('r_'+i);
+    if(v && v.value && v.value!=='NA'){sum+=+v.value;cnt++;}
   });
   const el=document.getElementById('overallScore');
   const flags=document.getElementById('overallFlags');
-  if(!cnt){el.innerHTML='—<small>/5</small>';flags.innerHTML='<span class="flag ok">Fill in manager ratings to calculate</span>';return;}
+  if(!cnt){el.innerHTML='—<small>/5</small>';flags.innerHTML='<span class="flag ok">Fill in ratings to calculate</span>';return;}
   const avg=sum/cnt;
   el.innerHTML=avg.toFixed(2)+'<small>/5</small>';
+
+  const band=Math.round(avg);
   let f='';
-  if(avg>=4){f+='<span class="flag rec">Recognition candidate</span>';document.getElementById('s_rec').value='Yes';}
-  else if(avg<=2){f+='<span class="flag pip">PIP required</span>';document.getElementById('s_pip').value='Yes';}
-  else f+='<span class="flag ok">Meets expectations — continue & set goals</span>';
+  if(currentType==='lead_member'){
+    if(avg>=4){f=`<span class="flag rec">${SCALE[band].label} — ${SCALE[band].action}</span>`;document.getElementById('s_rec').value='Yes';}
+    else if(avg<=2){f=`<span class="flag pip">${SCALE[band].label} — ${SCALE[band].action}</span>`;document.getElementById('s_pip').value='Yes';}
+    else f=`<span class="flag ok">${SCALE[3].label} — ${SCALE[3].action}</span>`;
+  } else {
+    f='<span class="flag ok">One input of several — not a decision on its own</span>';
+  }
+  if(cnt < Math.ceil(currentItems.length/2)) f+=' <span class="flag warn">Too many N/As — you may not be the right rater</span>';
   flags.innerHTML=f+` <span class="hint">(${cnt} of ${currentItems.length} criteria rated)</span>`;
+}
+
+function typeLabel(t){
+  return {lead_member:'Lead → Member', peer:'Member → Member (peer)', member_lead:'Member → Lead (upward)'}[t]||'—';
 }
 
 function collect(){
   const role=document.getElementById('f_role').value;
+  const type=document.getElementById('f_type').value;
   const rows=currentItems.map((it,i)=>({
-    criterion: typeof it==='string'?it:it.t,
-    self: val('self_'+i), manager: val('mgr_'+i), notes: val('note_'+i)
+    criterion: it.text,
+    key: it.key,
+    rating: val('r_'+i),
+    ratingLabel: (val('r_'+i) && val('r_'+i)!=='NA') ? SCALE[val('r_'+i)].label : val('r_'+i),
+    notes: val('note_'+i)
   }));
-  const rated=rows.filter(r=>r.manager);
-  const avg=rated.length? (rated.reduce((a,r)=>a+ +r.manager,0)/rated.length):null;
+  const rated=rows.filter(r=>r.rating && r.rating!=='NA');
+  const avg=rated.length? (rated.reduce((a,r)=>a+ +r.rating,0)/rated.length):null;
   return {
-    contractor:val('f_name'), orangehrmEmployeeId:val('f_orangehrmId'), role, channel:val('f_channel'), reviewer:val('f_reviewer'),
-    period:val('f_period'), editorType: role==='editor'?val('f_editortype'):null,
-    criteria:rows, overall: avg!==null? +avg.toFixed(2):null,
-    strength:val('s_strength'), improvement:val('s_improve'), goal:val('s_goal'),
-    recognition:val('s_rec'), pip:val('s_pip'), comments:val('s_comments'),
-    generatedAt: new Date().toISOString()
+    reviewType:type, reviewTypeLabel:typeLabel(type),
+    subject:val('f_name'), subjectEmpNumber: val('f_emp') || null, reviewer:val('f_reviewer'),
+    anonymousToSubject: type!=='lead_member',
+    role, channel:val('f_channel'), period:val('f_period'),
+    contactFrequency:val('f_contact'),
+    editorType:(type==='lead_member'&&role==='editor')?val('f_editortype'):null,
+    criteria:rows, raterScore: avg!==null? +avg.toFixed(2):null,
+    strength:val('s_strength'), improvement:val('s_improve'),
+    goal: type==='lead_member'? val('s_goal'):null,
+    recognition: type==='lead_member'? val('s_rec'):null,
+    pip: type==='lead_member'? val('s_pip'):null,
+    comments:val('s_comments')
   };
 }
 function val(id){const e=document.getElementById(id);return e?e.value:'';}
 
 function generate(){
   const d=collect();
-  const roleName=document.getElementById('f_role').selectedOptions[0].text;
-  let rowsHtml=d.criteria.map((r,i)=>`<div class="sumline"><span class="k">${i+1}. ${r.criterion}</span><br>
-    Self: <b>${r.self||'–'}</b> · Manager: <b>${r.manager||'–'}</b>${r.notes?' · '+r.notes:''}</div>`).join('');
+  const roleSel=document.getElementById('f_role');
+  const roleName=roleSel.value? roleSel.selectedOptions[0].text : '—';
+  const rowsHtml=d.criteria.map((r,i)=>`<div class="sumline"><span class="k">${i+1}. ${escapeHtml(r.criterion)}</span><br>
+    Rating: <b>${r.rating? (r.rating==='NA'?'N/A':r.rating+' / 5 — '+r.ratingLabel) :'–'}</b>${r.notes?' · '+escapeHtml(r.notes):''}</div>`).join('');
   document.getElementById('outBody').innerHTML=`
-    <div class="sumline"><span class="k">Contractor:</span> ${d.contractor||'—'} &nbsp;·&nbsp; <span class="k">Role:</span> ${roleName}${d.editorType?' ('+d.editorType+')':''}</div>
-    <div class="sumline"><span class="k">Channel(s):</span> ${d.channel||'—'} &nbsp;·&nbsp; <span class="k">Reviewer:</span> ${d.reviewer||'—'} &nbsp;·&nbsp; <span class="k">Period:</span> ${d.period||'—'}</div>
-    <div class="sumline" style="font-size:16px"><span class="k">Overall rating:</span> <b>${d.overall!==null?d.overall+' / 5':'—'}</b>
+    <div class="sumline"><span class="k">Review type:</span> ${d.reviewTypeLabel}
+      ${d.anonymousToSubject?'<span class="flag ok" style="margin-left:6px">Anonymous to the person reviewed</span>':''}</div>
+    <div class="sumline"><span class="k">Person reviewed:</span> ${escapeHtml(d.subject||'—')} &nbsp;·&nbsp; <span class="k">Role:</span> ${roleName}${d.editorType?' ('+d.editorType+')':''}</div>
+    <div class="sumline"><span class="k">Reviewer:</span> ${escapeHtml(d.reviewer||'—')} &nbsp;·&nbsp; <span class="k">Works with them:</span> ${d.contactFrequency}
+      &nbsp;·&nbsp; <span class="k">Channel(s):</span> ${escapeHtml(d.channel||'—')} &nbsp;·&nbsp; <span class="k">Period:</span> ${escapeHtml(d.period||'—')}</div>
+    <div class="sumline" style="font-size:16px"><span class="k">This rater's overall:</span> <b>${d.raterScore!==null?d.raterScore+' / 5':'—'}</b>
       &nbsp; ${d.recognition==='Yes'?'<span class="flag rec">Recognition</span>':''} ${d.pip==='Yes'?'<span class="flag pip">PIP</span>':''}</div>
     <div style="margin:12px 0 4px" class="k">Criteria ratings</div>${rowsHtml}
-    <div class="sumline"><span class="k">Greatest strength:</span> ${d.strength||'—'}</div>
-    <div class="sumline"><span class="k">Area for improvement:</span> ${d.improvement||'—'}</div>
-    <div class="sumline"><span class="k">Action plan / goal:</span> ${d.goal||'—'}</div>
-    <div class="sumline"><span class="k">Additional comments:</span> ${d.comments||'—'}</div>`;
+    <div class="sumline"><span class="k">Greatest strength:</span> ${escapeHtml(d.strength||'—')}</div>
+    <div class="sumline"><span class="k">Area for improvement:</span> ${escapeHtml(d.improvement||'—')}</div>
+    ${d.goal?`<div class="sumline"><span class="k">Action plan / goal:</span> ${escapeHtml(d.goal)}</div>`:''}
+    <div class="sumline"><span class="k">Additional comments:</span> ${escapeHtml(d.comments||'—')}</div>`;
   window.__review=d;
   document.getElementById('summaryOut').style.display='block';
-  document.getElementById('summaryOut').scrollIntoView({behavior:'smooth'});
+  return d;
 }
 
-async function sendToOrangeHRM(){
-  const d = window.__review || collect();
-  const msg = document.getElementById('sendMsg');
-  const btn = document.getElementById('sendBtn');
-  msg.style.display = 'block';
-  btn.disabled = true;
-  msg.innerHTML = '⏳ Sending…';
-  try {
-    const res = await fetch('/api/push-to-orangehrm', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(d)
-    });
-    const result = await res.json();
-    if (result.dryRun) {
-      msg.innerHTML = `🧪 <b>Dry run — nothing was sent yet.</b><br>
-        Would push to employee ID <b>${result.wouldSendTo ? result.wouldSendTo.split('/').slice(-2,-1)[0] : d.orangehrmEmployeeId}</b>:
-        file <b>${result.fileName||''}</b><br>${result.comment||''}<br>
-        <span class="hint">Turn this off in the server's .env (ORANGEHRM_DRY_RUN=false) once you've verified it against your instance.</span>`;
-    } else if (result.ok) {
-      msg.innerHTML = `✅ <b>Sent.</b> Attached to ${d.contractor||'this employee'}'s OrangeHRM record.`;
-    } else {
-      msg.innerHTML = `❌ <b>Not sent.</b> ${result.reason || 'Unknown error.'}${result.detail ? '<br><span class="hint">'+result.detail+'</span>' : ''}`;
-    }
-  } catch (err) {
-    msg.innerHTML = `❌ <b>Couldn't reach the server.</b> ${err.message}. Is this page being served by the appraisal server (not just opened as a local file)?`;
+async function submitReview(){
+  const btn=document.getElementById('submitBtn');
+  const d=collect();
+
+  const problems=[];
+  if(!d.reviewType) problems.push('Pick a review type.');
+  if(!d.subject) problems.push('Pick the person you are reviewing.');
+  if(!d.reviewer) problems.push('Put your own name in.');
+  if(d.reviewType==='lead_member' && !d.role) problems.push('Pick their role.');
+  if(d.raterScore===null) problems.push('Rate at least one criterion.');
+  if(problems.length){ alert(problems.join('\n')); return; }
+
+  btn.disabled=true; btn.textContent='Sending…';
+  generate();
+  const msg=document.getElementById('sendMsg');
+  msg.style.display='block';
+
+  try{
+    const res=await fetch('/api/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
+    const json=await res.json();
+    if(!res.ok) throw new Error(json.error||`Server said ${res.status}`);
+
+    const still = (json.stillNeeded||[]).length
+      ? `<br><span class="hint">${json.stillNeeded.map(escapeHtml).join(' ')}</span>`
+      : '<br><span class="hint">This person now has everything they need for a final rating.</span>';
+
+    msg.innerHTML=`✅ <b>${escapeHtml(json.message)}</b> ${escapeHtml(d.subject)} has ${json.receivedForThisPerson} review${json.receivedForThisPerson===1?'':'s'} on file for this round.${still}`;
+    btn.textContent='Submitted';
+    document.getElementById('summaryOut').scrollIntoView({behavior:'smooth'});
+  }catch(err){
+    msg.innerHTML=`❌ <b>Not saved.</b> ${escapeHtml(err.message)} Nothing was recorded — try again, and tell HR if it keeps failing.`;
+    btn.disabled=false; btn.textContent='Submit review';
   }
-  btn.disabled = false;
 }
 
 function downloadJSON(){
@@ -355,9 +571,11 @@ function downloadJSON(){
   const blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
-  a.download=(d.contractor||'appraisal').replace(/\s+/g,'_')+'_review.json';
+  a.download=(d.subject||'appraisal').replace(/\s+/g,'_')+'_'+(d.reviewType||'review')+'.json';
   a.click();
 }
+
+boot();
 </script>
 </body>
 </html>

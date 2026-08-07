@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Look Up Media LLC — HR Console</title>
+<style>
+  :root{
+    --panel:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0;
+    --accent:#4f46e5; --good:#16a34a; --warn:#d97706; --bad:#dc2626; --soft:#f8fafc;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:#eef2f7;color:var(--ink);line-height:1.5}
+  header{background:linear-gradient(135deg,#1e1b4b,#312e81);color:#fff;padding:22px 28px;
+    display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+  header .brand{font-size:20px;font-weight:700}
+  header .sub{font-size:13px;opacity:.8;margin-top:2px}
+  header nav a{color:#c7d2fe;font-size:13px;text-decoration:none;margin-left:14px}
+  header nav a:hover{color:#fff;text-decoration:underline}
+  .wrap{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:20px;
+    box-shadow:0 1px 2px rgba(15,23,42,.04)}
+  h2{font-size:15px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0 0 16px}
+  label{display:block;font-size:13px;font-weight:600;margin:0 0 5px;color:#334155}
+  input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;
+    font-size:14px;font-family:inherit;background:#fff;color:var(--ink)}
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:760px){.g2,.g4{grid-template-columns:1fr}}
+  .btn{padding:10px 16px;border-radius:10px;border:1px solid var(--line);background:#fff;color:#334155;
+    font-size:14px;font-weight:600;cursor:pointer}
+  .btn:hover{border-color:#cbd5e1}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{background:#4338ca}
+  .btn.small{padding:6px 11px;font-size:12.5px;border-radius:8px}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);background:var(--soft)}
+  .pill{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:3px 9px}
+  .pill.ok{background:#e0e7ff;color:#3730a3}
+  .pill.good{background:#dcfce7;color:#166534}
+  .pill.warn{background:#fef3c7;color:#92400e}
+  .pill.bad{background:#fee2e2;color:#991b1b}
+  .pill.done{background:#ecfdf5;color:#065f46}
+  .hint{font-size:12px;color:var(--muted)}
+  .score{font-size:19px;font-weight:800;color:#312e81}
+  .note{font-size:13px;border-radius:10px;padding:11px 13px;margin-top:12px}
+  .note.info{background:#eef2ff;border:1px dashed #c7d2fe;color:#3730a3}
+  .note.warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+  .note.bad{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+  .note.good{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46}
+  dialog{border:none;border-radius:16px;padding:0;max-width:760px;width:94vw;box-shadow:0 20px 60px rgba(15,23,42,.25)}
+  dialog::backdrop{background:rgba(15,23,42,.45)}
+  .dlgHead{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:start;gap:12px}
+  .dlgBody{padding:20px 24px;max-height:66vh;overflow:auto}
+  .dlgFoot{padding:16px 24px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+  .kv{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;font-size:13.5px;margin-bottom:14px}
+  .kv .k{color:var(--muted);font-weight:600}
+  .crit{border-bottom:1px solid var(--line);padding:9px 0;font-size:13.5px}
+  .crit b{display:inline-block;min-width:38px;color:#312e81}
+  pre{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12px;overflow:auto}
+  .gate{max-width:380px;margin:80px auto}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">Look Up Media LLC — HR Console</div>
+    <div class="sub">Multi-rater reviews · blending · OrangeHRM</div>
+  </div>
+  <nav>
+    <a href="/" target="_blank">Open the rater form ↗</a>
+    <a href="#" onclick="signOut();return false">Sign out</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <!-- Password gate -->
+  <div id="gate" class="card gate">
+    <h2>HR sign-in</h2>
+    <label>HR password</label>
+    <input type="password" id="pw" onkeydown="if(event.key==='Enter')signIn()" placeholder="Set in .env as ADMIN_PASSWORD">
+    <div class="bar" style="margin-top:14px"><button class="btn primary" onclick="signIn()">Sign in</button></div>
+    <div id="gateMsg" class="note bad" style="display:none"></div>
+  </div>
+
+  <div id="app" style="display:none">
+
+    <!-- OrangeHRM connection -->
+    <div class="card">
+      <h2>OrangeHRM connection</h2>
+      <div id="conn"></div>
+      <div class="bar" style="margin-top:14px">
+        <button class="btn primary" id="connectBtn" onclick="connect()">Connect to OrangeHRM</button>
+        <button class="btn" onclick="syncRoster()">Sync staff list</button>
+        <button class="btn" onclick="disconnect()">Disconnect</button>
+      </div>
+      <div id="connMsg"></div>
+    </div>
+
+    <!-- Cycle -->
+    <div class="card">
+      <h2>Review round</h2>
+      <div id="cycleNow"></div>
+      <details style="margin-top:14px">
+        <summary style="cursor:pointer;font-weight:600;font-size:14px;color:#334155">Open a new round</summary>
+        <div class="grid g4" style="margin-top:14px">
+          <div><label>Name</label><input id="c_name" placeholder="Q3 2026"></div>
+          <div><label>Period starts</label><input id="c_start" type="date"></div>
+          <div><label>Period ends</label><input id="c_end" type="date"></div>
+          <div><label>Reviews due</label><input id="c_due" type="date"></div>
+        </div>
+        <div class="bar" style="margin-top:12px">
+          <button class="btn primary" onclick="openCycle()">Open this round</button>
+          <span class="hint">Opening a round closes the current one. Raters can only submit into the open round.</span>
+        </div>
+      </details>
+      <div id="cycleMsg"></div>
+    </div>
+
+    <!-- People -->
+    <div class="card">
+      <h2>Reviews collected</h2>
+      <div id="people"></div>
+    </div>
+
+    <!-- Push log -->
+    <div class="card">
+      <h2>Sent to OrangeHRM</h2>
+      <div id="pushes"></div>
+    </div>
+  </div>
+</div>
+
+<dialog id="detail">
+  <div class="dlgHead">
+    <div><div id="d_name" style="font-size:19px;font-weight:700"></div><div id="d_sub" class="hint"></div></div>
+    <button class="btn small" onclick="document.getElementById('detail').close()">Close</button>
+  </div>
+  <div class="dlgBody" id="d_body"></div>
+  <div class="dlgFoot" id="d_foot"></div>
+</dialog>
+
+<script>
+let KEY = sessionStorage.getItem('lum_hr_key') || '';
+let STATE = { cycle:null, subjects:[], status:null };
+
+const esc = s => String(s ?? '').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+async function api(path, opts={}){
+  const res = await fetch(path, {
+    ...opts,
+    headers: { 'Content-Type':'application/json', 'x-admin-key': KEY, ...(opts.headers||{}) }
+  });
+  const json = await res.json().catch(()=>({}));
+  if(!res.ok) throw new Error(json.error || `Server said ${res.status}`);
+  return json;
+}
+
+async function signIn(){
+  KEY = document.getElementById('pw').value;
+  const msg = document.getElementById('gateMsg');
+  try{
+    await api('/api/admin/status');
+    sessionStorage.setItem('lum_hr_key', KEY);
+    msg.style.display='none';
+    show();
+  }catch(err){
+    msg.style.display='block';
+    msg.textContent = err.message;
+  }
+}
+
+function signOut(){ sessionStorage.removeItem('lum_hr_key'); location.reload(); }
+
+async function show(){
+  document.getElementById('gate').style.display='none';
+  document.getElementById('app').style.display='block';
+  await refresh();
+}
+
+async function refresh(){
+  STATE.status = await api('/api/admin/status');
+  renderConnection();
+  renderCycle();
+  renderPushes();
+  const data = await api('/api/admin/subjects');
+  STATE.cycle = data.cycle;
+  STATE.subjects = data.subjects;
+  renderPeople();
+}
+
+// --- connection -------------------------------------------------------------
+
+function renderConnection(){
+  const o = STATE.status.orangehrm;
+  const bits = [];
+  bits.push(`<div class="kv">
+    <div class="k">Instance</div><div>${o.baseUrl ? esc(o.baseUrl) : '<span class="pill bad">not configured</span>'}</div>
+    <div class="k">Signed in</div><div>${o.connected ? `<span class="pill good">yes</span> <span class="hint">token good until ${esc(new Date(o.expiresAt).toLocaleString())}</span>` : '<span class="pill warn">no</span>'}</div>
+    <div class="k">Mode</div><div>${o.dryRun ? '<span class="pill warn">dry run — nothing is actually sent</span>' : '<span class="pill good">live — pushes reach OrangeHRM</span>'}</div>
+    <div class="k">Stand-in reviewer</div><div>${o.fallbackReviewerEmpNumber ? `empNumber ${esc(o.fallbackReviewerEmpNumber)} <span class="hint">used for people with no internal supervisor</span>` : '<span class="pill warn">not set</span>'}</div>
+    <div class="k">Staff list</div><div>${STATE.status.rosterSize ? `${STATE.status.rosterSize} people · synced ${esc(new Date(STATE.status.rosterSyncedAt).toLocaleString())}` : '<span class="pill warn">not synced yet</span>'}</div>
+  </div>`);
+  if(o.dryRun){
+    bits.push(`<div class="note info">Dry run is on. Pushes show you exactly what would land in OrangeHRM without sending it.
+      When the plan looks right, set <code>ORANGEHRM_DRY_RUN=false</code> and restart.</div>`);
+  }
+  document.getElementById('conn').innerHTML = bits.join('');
+  document.getElementById('connectBtn').textContent = o.connected ? 'Reconnect to OrangeHRM' : 'Connect to OrangeHRM';
+}
+
+function connect(){ window.open('/oauth/start','_blank'); toast('connMsg','info','A tab opened for OrangeHRM to confirm. Come back here and refresh once it says connected.'); }
+
+async function disconnect(){
+  await api('/api/admin/disconnect',{method:'POST'});
+  toast('connMsg','info','Disconnected. Nothing can be pushed until you connect again.');
+  refresh();
+}
+
+async function syncRoster(){
+  toast('connMsg','info','Fetching the staff list from OrangeHRM…');
+  try{
+    const r = await api('/api/admin/sync-roster',{method:'POST'});
+    toast('connMsg','good',`${r.count} people and ${r.jobTitles} job titles synced. Raters can now pick people from the list instead of typing names.`);
+    refresh();
+  }catch(err){ toast('connMsg','bad',err.message); }
+}
+
+// --- cycle ------------------------------------------------------------------
+
+function renderCycle(){
+  const open = STATE.status.cycles.find(c=>c.status==='open');
+  document.getElementById('cycleNow').innerHTML = open
+    ? `<div class="kv"><div class="k">Open round</div><div><b>${esc(open.name)}</b> · ${esc(open.startDate)} to ${esc(open.endDate)} · due ${esc(open.dueDate)}</div>
+       <div class="k">Reviews in</div><div>${STATE.status.reviewCount} across all rounds</div></div>`
+    : `<div class="note warn">No round is open, so raters can't submit anything. Open one below.</div>`;
+}
+
+async function openCycle(){
+  const body = {
+    name: document.getElementById('c_name').value,
+    startDate: document.getElementById('c_start').value,
+    endDate: document.getElementById('c_end').value,
+    dueDate: document.getElementById('c_due').value
+  };
+  try{
+    await api('/api/admin/cycles',{method:'POST',body:JSON.stringify(body)});
+    toast('cycleMsg','good',`${body.name} is open. Send raters the form link.`);
+    refresh();
+  }catch(err){ toast('cycleMsg','bad',err.message); }
+}
+
+// --- people -----------------------------------------------------------------
+
+function renderPeople(){
+  const el = document.getElementById('people');
+  if(!STATE.cycle){ el.innerHTML = '<div class="hint">No round open yet.</div>'; return; }
+  if(!STATE.subjects.length){ el.innerHTML = '<div class="hint">No reviews submitted for this round yet.</div>'; return; }
+
+  const rows = STATE.subjects.map(s=>{
+    const b = s.blend;
+    const g = b.groups;
+    const status = s.pushed
+      ? `<span class="pill done">in OrangeHRM</span>`
+      : b.readyToFinalise ? `<span class="pill good">ready</span>` : `<span class="pill warn">waiting</span>`;
+    return `<tr>
+      <td><b>${esc(s.name)}</b>${s.empNumber?'':' <span class="pill warn" title="Not linked to an OrangeHRM record">unlinked</span>'}<div class="hint">${esc(s.role||'—')}</div></td>
+      <td class="hint">${g.lead.responses} lead · ${g.peer.responses} peer · ${g.upward.responses} upward</td>
+      <td><span class="score">${b.finalRating ?? '—'}</span><div class="hint">${esc(b.ratingLabel||'')}</div></td>
+      <td>${status}</td>
+      <td style="white-space:nowrap">
+        <button class="btn small" onclick="openDetail('${s.key}')">Open</button>
+      </td></tr>`;
+  }).join('');
+
+  el.innerHTML = `<table>
+    <tr><th>Person</th><th>Raters</th><th>Blended</th><th>Status</th><th></th></tr>${rows}</table>
+    <div class="hint" style="margin-top:12px">Peer and upward raters are never named here — they were promised anonymity on the form.</div>`;
+}
+
+async function openDetail(key){
+  const d = await api(`/api/admin/subjects/${encodeURIComponent(key)}`);
+  const s = STATE.subjects.find(x=>x.key===key);
+  const b = d.blend;
+
+  document.getElementById('d_name').textContent = s.name;
+  document.getElementById('d_sub').textContent = `${s.role||'—'} · ${d.cycle.name} · ${b.totalRaters} raters`;
+
+  const groupRows = ['lead','peer','upward'].map(k=>{
+    const g = b.groups[k];
+    return `<div class="crit"><b>${g.average ?? '—'}</b> ${g.label} · ${g.responses} response${g.responses===1?'':'s'} ·
+      ${g.counts ? `counts at ${g.weight}%` : `<span class="pill warn">needs ${g.required}</span>`}</div>`;
+  }).join('');
+
+  const lead = d.reviews.find(r=>r.reviewType==='lead_member');
+  const critRows = lead ? (lead.criteria||[]).map(c=>
+    `<div class="crit"><b>${c.rating==='NA'?'N/A':c.rating}</b> ${esc(c.criterion)}${c.notes?`<div class="hint" style="margin-left:38px">${esc(c.notes)}</div>`:''}</div>`
+  ).join('') : '<div class="hint">No lead scorecard yet — the KPI ratings come from this, so it is required.</div>';
+
+  const notes = [
+    ...b.blockers.map(t=>`<div class="note bad">${esc(t)}</div>`),
+    ...b.warnings.map(t=>`<div class="note warn">${esc(t)}</div>`)
+  ].join('');
+
+  document.getElementById('d_body').innerHTML = `
+    <div class="kv">
+      <div class="k">Final rating</div><div><span class="score">${b.finalRating ?? '—'}</span> ${esc(b.ratingLabel||'')} — ${esc(b.recommendedAction||'')}</div>
+      <div class="k">OrangeHRM record</div><div>${s.empNumber ? `empNumber ${s.empNumber} · ${esc(s.jobTitle||'no job title set')}` : '<span class="pill warn">not linked</span>'}</div>
+      <div class="k">Reviewer for the row</div><div>${reviewerLine(s)}</div>
+    </div>
+    ${notes}
+    <h2 style="margin-top:18px">How it blends</h2>${groupRows}
+    <h2 style="margin-top:18px">The lead's scorecard — this becomes the KPI ratings</h2>${critRows}
+    <div id="pushMsg"></div>`;
+
+  document.getElementById('d_foot').innerHTML = `
+    <button class="btn" onclick="window.open('/api/admin/subjects/${encodeURIComponent(key)}/pdf?key='+encodeURIComponent(KEY),'_blank')">Preview summary PDF</button>
+    <button class="btn primary" id="pushBtn" onclick="push('${key}', ${!b.readyToFinalise})">
+      ${STATE.status.orangehrm.dryRun ? 'Preview what goes to OrangeHRM' : 'Send to OrangeHRM'}
+    </button>`;
+
+  document.getElementById('detail').showModal();
+}
+
+async function push(key, force){
+  const btn = document.getElementById('pushBtn');
+  btn.disabled = true; btn.textContent = 'Working…';
+  try{
+    const r = await api('/api/admin/push',{method:'POST',body:JSON.stringify({ subjectKey:key, cycleId:STATE.cycle.id, force })});
+
+    if(r.blocked){
+      toast('pushMsg','bad', 'Not sent. ' + r.blockers.join(' '));
+    } else if(r.dryRun){
+      toast('pushMsg','info', `<b>Dry run — nothing was sent.</b> This is what would land in OrangeHRM:
+        <pre>${esc(JSON.stringify(r.plan,null,2))}</pre>`);
+    } else {
+      toast('pushMsg','good', `<b>Done.</b> ${r.steps.map(esc).join('<br>')}`);
+      refresh();
+    }
+  }catch(err){
+    toast('pushMsg','bad', err.message);
+  }
+  btn.disabled = false;
+  btn.textContent = STATE.status.orangehrm.dryRun ? 'Preview what goes to OrangeHRM' : 'Send to OrangeHRM';
+}
+
+function renderPushes(){
+  const list = STATE.status.pushes;
+  document.getElementById('pushes').innerHTML = list.length
+    ? `<table><tr><th>When</th><th>Person</th><th>Final</th><th>OrangeHRM review</th></tr>` +
+      list.map(p=>`<tr><td class="hint">${esc(new Date(p.at).toLocaleString())}</td><td>${esc(p.name)}</td>
+        <td><b>${p.finalRating}</b>/5</td><td class="hint">#${esc(p.reviewId)}</td></tr>`).join('') + '</table>'
+    : '<div class="hint">Nothing has been sent to OrangeHRM yet.</div>';
+}
+
+function reviewerLine(s){
+  if(s.supervisorEmpNumber) return `empNumber ${s.supervisorEmpNumber}`;
+  const fb = STATE.status.orangehrm.fallbackReviewerEmpNumber;
+  if(fb) return `<span class="pill ok">stand-in</span> empNumber ${fb} — they have no internal supervisor, so OrangeHRM files the row under the nominated reviewer. The rating is unaffected.`;
+  return '<span class="pill warn">no supervisor, and no stand-in reviewer set</span>';
+}
+
+function toast(id, kind, html){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.innerHTML = `<div class="note ${kind}">${html}</div>`;
+}
+
+if(KEY) show().catch(()=>{ document.getElementById('gate').style.display='block'; document.getElementById('app').style.display='none'; });
+</script>
+</body>
+</html>

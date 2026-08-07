@@ -1,0 +1,540 @@
+{
+  "version": "final-2026-08",
+  "scale": {
+    "1": {
+      "label": "Unsatisfactory",
+      "action": "Contract review / termination"
+    },
+    "2": {
+      "label": "Needs Improvement",
+      "action": "Performance Improvement Plan"
+    },
+    "3": {
+      "label": "Meets Expectations",
+      "action": "Continue + set growth goals"
+    },
+    "4": {
+      "label": "Exceeds Expectations",
+      "action": "Recognition"
+    },
+    "5": {
+      "label": "Outstanding",
+      "action": "Recognition + bonus consideration"
+    }
+  },
+  "weights": {
+    "lead": 60,
+    "peer": 25,
+    "upward": 15
+  },
+  "minimums": {
+    "raters": 3,
+    "peer": 2,
+    "upward": 3
+  },
+  "roles": {
+    "ideator": {
+      "label": "Ideator",
+      "orangeHrmJobTitle": "Ideator",
+      "title": "Form 1 — Ideator Performance Review",
+      "items": [
+        {
+          "key": "c1",
+          "text": "Quantity of content ideas submitted per period — meets or exceeds the required minimum",
+          "kpiTitle": "Quantity of content ideas submitted per period",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c2",
+          "text": "Quality of ideas — topics are original, niche-appropriate, and audience-relevant",
+          "kpiTitle": "Quality of ideas",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c3",
+          "text": "Research quality — content briefs include accurate, credible, and usable source materials",
+          "kpiTitle": "Research quality",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c4",
+          "text": "Trend awareness — topics reflect current niche trends, seasonal opportunities, and algorithm patterns",
+          "kpiTitle": "Trend awareness",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c5",
+          "text": "Title and hook quality — proposed titles and hooks are click-worthy and competitive",
+          "kpiTitle": "Title and hook quality",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c6",
+          "text": "Timeliness — ideas and briefs submitted before the scriptwriting deadline without requiring chasing",
+          "kpiTitle": "Timeliness",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c7",
+          "text": "Collaboration — communicates clearly with CM and scriptwriter; responds to feedback constructively",
+          "kpiTitle": "Collaboration",
+          "fullEditorsOnly": false
+        }
+      ]
+    },
+    "scriptwriter": {
+      "label": "Scriptwriter",
+      "orangeHrmJobTitle": "Scriptwriter",
+      "title": "Form 2 — Scriptwriter Performance Review",
+      "items": [
+        {
+          "key": "c1",
+          "text": "Script output — meets or exceeds the required number of completed scripts per period",
+          "kpiTitle": "Script output",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c2",
+          "text": "Hook quality — opening hooks are strong, engaging, and retain viewer attention within the first 30 seconds",
+          "kpiTitle": "Hook quality",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c3",
+          "text": "Script structure — clear narrative arc, logical flow, effective re-hooks, and a strong CTA",
+          "kpiTitle": "Script structure",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c4",
+          "text": "Tone and niche alignment — writing style matches the channel's voice and audience expectations",
+          "kpiTitle": "Tone and niche alignment",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c5",
+          "text": "Factual accuracy — all claims are supported by cited sources; no misinformation or unverified statistics",
+          "kpiTitle": "Factual accuracy",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c6",
+          "text": "Word count accuracy — scripts consistently hit the target length for the assigned video duration",
+          "kpiTitle": "Word count accuracy",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c7",
+          "text": "Revision responsiveness — revisions completed accurately and within the agreed turnaround time",
+          "kpiTitle": "Revision responsiveness",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c8",
+          "text": "Collaboration — communicates clearly with Ideator, CM, and editor; accepts feedback professionally",
+          "kpiTitle": "Collaboration",
+          "fullEditorsOnly": false
+        }
+      ]
+    },
+    "thumbnail": {
+      "label": "Thumbnail Creator",
+      "orangeHrmJobTitle": "Thumbnail Creator",
+      "title": "Form 3 — Thumbnail Creator Performance Review",
+      "items": [
+        {
+          "key": "c1",
+          "text": "Design quality — thumbnails are visually striking, professional, and click-optimised",
+          "kpiTitle": "Design quality",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c2",
+          "text": "Niche alignment — designs match the tone and visual style of the assigned channel",
+          "kpiTitle": "Niche alignment",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c3",
+          "text": "CTR performance — thumbnails produced during this period achieved competitive click-through rates (where data is available)",
+          "kpiTitle": "CTR performance",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c4",
+          "text": "Technical compliance — all thumbnails delivered in correct specifications (1280x720px, correct format and file size)",
+          "kpiTitle": "Technical compliance",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c5",
+          "text": "A/B testing delivery — alternate versions submitted alongside every primary thumbnail without exception",
+          "kpiTitle": "A/B testing delivery",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c6",
+          "text": "Timeliness — thumbnails delivered before the upload deadline with no delays to the production pipeline",
+          "kpiTitle": "Timeliness",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c7",
+          "text": "Revision responsiveness — corrections applied accurately and promptly following CM or QA feedback",
+          "kpiTitle": "Revision responsiveness",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c8",
+          "text": "Asset management — source files saved and stored correctly in the designated company folder",
+          "kpiTitle": "Asset management",
+          "fullEditorsOnly": false
+        }
+      ]
+    },
+    "editor": {
+      "label": "Video Editor",
+      "orangeHrmJobTitle": "Video Editor",
+      "title": "Form 4 — Video Editor Performance Review",
+      "items": [
+        {
+          "key": "c1",
+          "text": "Edit quality — finished videos are well-paced, clean, and engaging; no technical errors or visual gaps",
+          "kpiTitle": "Edit quality",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c2",
+          "text": "Audio quality — voiceover and background music are balanced correctly; no sync errors",
+          "kpiTitle": "Audio quality",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c3",
+          "text": "B-roll accuracy — footage used accurately matches the narration; no irrelevant or mismatched visuals",
+          "kpiTitle": "B-roll accuracy",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c4",
+          "text": "Style guide compliance — channel's visual identity (fonts, colours, transitions, overlays) consistently applied",
+          "kpiTitle": "Style guide compliance",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c5",
+          "text": "Map/graphic quality — custom map animations and motion graphics are accurate and professionally executed",
+          "kpiTitle": "Map/graphic quality",
+          "fullEditorsOnly": true
+        },
+        {
+          "key": "c6",
+          "text": "Export specification compliance — final file delivered in correct resolution, format, and bitrate every time",
+          "kpiTitle": "Export specification compliance",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c7",
+          "text": "Self-review quality — editor's own pre-submission checks catch errors before QA stage (fewer QA flags = better self-review)",
+          "kpiTitle": "Self-review quality",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c8",
+          "text": "Timeliness — edits submitted to QA by the agreed deadline within the content calendar",
+          "kpiTitle": "Timeliness",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c9",
+          "text": "Revision quality — QA and CM feedback applied accurately and completely; no repeat errors after revision",
+          "kpiTitle": "Revision quality",
+          "fullEditorsOnly": false
+        }
+      ]
+    },
+    "uploader": {
+      "label": "Uploader",
+      "orangeHrmJobTitle": "Uploader",
+      "title": "Form 5 — Uploader Performance Review",
+      "items": [
+        {
+          "key": "c1",
+          "text": "Upload accuracy — videos uploaded to the correct channel with no wrong-channel errors",
+          "kpiTitle": "Upload accuracy",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c2",
+          "text": "Metadata accuracy — titles, descriptions, and tags applied correctly and completely as provided",
+          "kpiTitle": "Metadata accuracy",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c3",
+          "text": "Thumbnail accuracy — correct thumbnail applied to every video; verified before submission",
+          "kpiTitle": "Thumbnail accuracy",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c4",
+          "text": "Schedule adherence — all videos uploaded on time as per the content calendar; no unexplained delays",
+          "kpiTitle": "Schedule adherence",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c5",
+          "text": "Upload log maintenance — log kept up to date and submitted to CM on the agreed schedule",
+          "kpiTitle": "Upload log maintenance",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c6",
+          "text": "Error reporting — any upload failures, access issues, or YouTube policy flags reported immediately to the CM and Cenri/Flo",
+          "kpiTitle": "Error reporting",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c7",
+          "text": "Credential compliance — platform credentials accessed only through the approved system; no sharing of access with unauthorised persons",
+          "kpiTitle": "Credential compliance",
+          "fullEditorsOnly": false
+        }
+      ]
+    },
+    "cm": {
+      "label": "Channel Manager",
+      "orangeHrmJobTitle": "Channel Manager",
+      "title": "Form 6 — Channel Manager Performance Review",
+      "items": [
+        {
+          "key": "c1",
+          "text": "Pipeline management — content calendar maintained and all production stages completed on schedule for every video in the period",
+          "kpiTitle": "Pipeline management",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c2",
+          "text": "Team coordination — assignments issued to all contractors with clear briefs, deadlines, and expectations; no preventable delays",
+          "kpiTitle": "Team coordination",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c3",
+          "text": "Quality oversight — script, thumbnail, and video reviews completed before handoff; issues caught and corrected before reaching QA",
+          "kpiTitle": "Quality oversight",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c4",
+          "text": "Escalation handling — team concerns addressed at CM level appropriately; escalations to HR are well-documented and genuinely unresolvable at CM level",
+          "kpiTitle": "Escalation handling",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c5",
+          "text": "Channel performance — upload frequency and overall channel metrics (views, CTR, watch time) maintained or improved during the review period",
+          "kpiTitle": "Channel performance",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c6",
+          "text": "Communication quality — responsive, clear, and professional in all team communications; issues addressed constructively not reactively",
+          "kpiTitle": "Communication quality",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c7",
+          "text": "Upload package delivery — complete, labelled upload packages delivered to the Uploader with all required elements and no missing assets",
+          "kpiTitle": "Upload package delivery",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c8",
+          "text": "Contractor development — proactively identifies team members who need support or recognition; raises concerns with HR in a timely manner",
+          "kpiTitle": "Contractor development",
+          "fullEditorsOnly": false
+        }
+      ]
+    },
+    "qa": {
+      "label": "Quality Analyst",
+      "orangeHrmJobTitle": "Quality Analyst",
+      "title": "Form 7 — Quality Analyst Performance Review",
+      "items": [
+        {
+          "key": "c1",
+          "text": "Review thoroughness — every video reviewed end-to-end; no errors missed that later appeared in published content",
+          "kpiTitle": "Review thoroughness",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c2",
+          "text": "Review turnaround — QA reviews completed within the agreed timeframe; no delays to the upload schedule caused by QA",
+          "kpiTitle": "Review turnaround",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c3",
+          "text": "Feedback quality — feedback notes are specific, actionable, and clearly reference timestamps or sections; no vague comments",
+          "kpiTitle": "Feedback quality",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c4",
+          "text": "YouTube policy compliance — zero policy violations in published content that passed QA review during the period",
+          "kpiTitle": "YouTube policy compliance",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c5",
+          "text": "Script and thumbnail review — scripts and thumbnails reviewed for accuracy and compliance before production proceeds",
+          "kpiTitle": "Script and thumbnail review",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c6",
+          "text": "QA log maintenance — log updated after every review and submitted to the CM on the agreed schedule",
+          "kpiTitle": "QA log maintenance",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c7",
+          "text": "Recurring issue reporting — patterns of repeated errors identified and escalated to the CM and Cenri for systemic improvement",
+          "kpiTitle": "Recurring issue reporting",
+          "fullEditorsOnly": false
+        },
+        {
+          "key": "c8",
+          "text": "Zero post-publish errors — no videos that passed QA required correction or were removed after publication due to a QA oversight",
+          "kpiTitle": "Zero post-publish errors",
+          "fullEditorsOnly": false
+        }
+      ]
+    }
+  },
+  "peer": {
+    "title": "Form 8 — Peer Review (Member → Member)",
+    "items": [
+      {
+        "key": "c1",
+        "text": "Handoff quality — the work they pass to you is complete, correctly labelled, and ready to use without rework",
+        "kpiTitle": "Handoff quality",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c2",
+        "text": "Reliability — hits agreed deadlines consistently; you rarely have to chase or wait on their part of the pipeline",
+        "kpiTitle": "Reliability",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c3",
+        "text": "Responsiveness — replies within working hours; you are not left blocked waiting for an answer",
+        "kpiTitle": "Responsiveness",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c4",
+        "text": "Clarity — briefs, notes, and messages are clear the first time; you do not have to ask twice to understand the task",
+        "kpiTitle": "Clarity",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c5",
+        "text": "Feedback handling — takes correction professionally and does not repeat the same issue after it has been raised",
+        "kpiTitle": "Feedback handling",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c6",
+        "text": "Accountability — flags their own mistakes and delays early rather than hiding them until they become your problem",
+        "kpiTitle": "Accountability",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c7",
+        "text": "Helpfulness — shares context and helps when asked, rather than working in a silo",
+        "kpiTitle": "Helpfulness",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c8",
+        "text": "Professionalism — respectful in group chats and calls; no blame-shifting, no drama, no venting about teammates",
+        "kpiTitle": "Professionalism",
+        "fullEditorsOnly": false
+      }
+    ]
+  },
+  "upward": {
+    "title": "Form 9 — Upward Review (Member → Lead)",
+    "items": [
+      {
+        "key": "c1",
+        "text": "Brief clarity — you know what is expected of you without having to guess or ask repeatedly",
+        "kpiTitle": "Brief clarity",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c2",
+        "text": "Availability — reachable when you are blocked; does not leave you waiting on a decision",
+        "kpiTitle": "Availability",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c3",
+        "text": "Feedback quality — specific and actionable, aimed at the work rather than the person",
+        "kpiTitle": "Feedback quality",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c4",
+        "text": "Fairness — workload, opportunities, and recognition are distributed fairly across the team",
+        "kpiTitle": "Fairness",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c5",
+        "text": "Decision-making — decides promptly instead of letting issues drift or escalate unnecessarily",
+        "kpiTitle": "Decision-making",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c6",
+        "text": "Support and development — removes blockers and helps you improve at your role",
+        "kpiTitle": "Support and development",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c7",
+        "text": "Tone and respect — professional and constructive in all communication, especially under pressure",
+        "kpiTitle": "Tone and respect",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c8",
+        "text": "Follow-through — does what they said they would do, when they said they would do it",
+        "kpiTitle": "Follow-through",
+        "fullEditorsOnly": false
+      },
+      {
+        "key": "c9",
+        "text": "Confidence in their leadership — overall, you are glad to work under this lead",
+        "kpiTitle": "Confidence in their leadership",
+        "fullEditorsOnly": false
+      }
+    ]
+  },
+  "blendedKpis": [
+    {
+      "key": "peer_avg",
+      "kpiTitle": "Peer review — pooled average",
+      "source": "peer"
+    },
+    {
+      "key": "upward_avg",
+      "kpiTitle": "Upward review — pooled average",
+      "source": "upward"
+    }
+  ]
+}
