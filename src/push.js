@@ -72,7 +72,7 @@ async function pushReview({ subject, cycle, reviews, options = {} }) {
 
   const plan = {
     employee: `${subject.name} (empNumber ${subject.empNumber})`,
-    jobTitle: roleDef.orangeHrmJobTitle,
+    jobTitle: roleDef.orangeHrmJobTitles.join(' / '),
     cycle: `${cycle.name} — ${cycle.startDate} to ${cycle.endDate}`,
     reviewer: usedFallback
       ? `empNumber ${reviewerEmpNumber} — nominated stand-in, because ${subject.name} has no internal supervisor`
@@ -92,7 +92,7 @@ async function pushReview({ subject, cycle, reviews, options = {} }) {
   // ---- 1. KPIs -------------------------------------------------------------
   const jobTitleId = subject.jobTitleId;
   if (!jobTitleId) {
-    return { ok: false, blocked: true, blockers: [`${subject.name} has no job title in OrangeHRM. KPIs hang off job titles, so set their job title to "${roleDef.orangeHrmJobTitle}" first.`], blend: result, plan };
+    return { ok: false, blocked: true, blockers: [`${subject.name} has no job title in OrangeHRM. KPIs hang off job titles, so set theirs to one of: ${roleDef.orangeHrmJobTitles.join(', ')}.`], blend: result, plan };
   }
 
   const kpiSync = await ohrm.ensureKpis({ jobTitleId, kpiTitles });

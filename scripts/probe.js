@@ -49,11 +49,24 @@ const bad = (s) => console.log(`  ✗ ${s}`);
 
   console.log('\nJob titles this site expects\n' + '─'.repeat(60));
   const byName = new Map(jobTitles.map((j) => [j.title.trim().toLowerCase(), j]));
+  const covered = new Set();
   let missing = 0;
-  for (const [key, role] of Object.entries(criteria.roles)) {
-    const hit = byName.get(role.orangeHrmJobTitle.trim().toLowerCase());
-    if (hit) ok(`${role.orangeHrmJobTitle} → id ${hit.id} (${role.items.length} KPIs)`);
-    else { bad(`${role.orangeHrmJobTitle} — no matching job title in OrangeHRM (role "${key}")`); missing++; }
+  for (const role of Object.values(criteria.roles)) {
+    console.log(`\n  ${role.label} (${role.items.length} KPIs)`);
+    for (const wanted of role.orangeHrmJobTitles) {
+      const hit = byName.get(wanted.trim().toLowerCase());
+      if (hit) { ok(`  ${wanted} → id ${hit.id}`); covered.add(hit.title); }
+      else { bad(`  ${wanted} — no matching job title in OrangeHRM`); missing++; }
+    }
+  }
+
+  const excluded = new Set((criteria.excludedJobTitles || []).map((t) => t.trim().toLowerCase()));
+  const uncovered = jobTitles.filter((j) => !covered.has(j.title) && !excluded.has(j.title.trim().toLowerCase()));
+  if (uncovered.length) {
+    console.log('\nJob titles with no scorecard\n' + '─'.repeat(60));
+    uncovered.forEach((j) => console.log(`  · ${j.title}`));
+    console.log('  These people can receive peer and upward reviews, but no lead');
+    console.log('  scorecard exists for them, so they cannot get a final rating yet.');
   }
 
   console.log('\n' + '─'.repeat(60));

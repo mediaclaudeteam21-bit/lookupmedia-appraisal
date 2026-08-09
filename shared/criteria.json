@@ -35,7 +35,6 @@
   "roles": {
     "ideator": {
       "label": "Ideator",
-      "orangeHrmJobTitle": "Ideator",
       "title": "Form 1 — Ideator Performance Review",
       "items": [
         {
@@ -80,11 +79,14 @@
           "kpiTitle": "Collaboration",
           "fullEditorsOnly": false
         }
+      ],
+      "orangeHrmJobTitles": [
+        "Ideator / QA / TB",
+        "Patreon BL/GL Editor and Ideator"
       ]
     },
     "scriptwriter": {
       "label": "Scriptwriter",
-      "orangeHrmJobTitle": "Scriptwriter",
       "title": "Form 2 — Scriptwriter Performance Review",
       "items": [
         {
@@ -135,11 +137,16 @@
           "kpiTitle": "Collaboration",
           "fullEditorsOnly": false
         }
+      ],
+      "orangeHrmJobTitles": [
+        "Scriptwriter",
+        "Scriptwriter Lead",
+        "Story Developer / Scriptwriter",
+        "Patreon Story Developer / Scriptwriter"
       ]
     },
     "thumbnail": {
       "label": "Thumbnail Creator",
-      "orangeHrmJobTitle": "Thumbnail Creator",
       "title": "Form 3 — Thumbnail Creator Performance Review",
       "items": [
         {
@@ -190,11 +197,15 @@
           "kpiTitle": "Asset management",
           "fullEditorsOnly": false
         }
+      ],
+      "orangeHrmJobTitles": [
+        "Thumbnail Designer",
+        "Thumbnail Designer Lead",
+        "TikTok / Thumbnail Designer"
       ]
     },
     "editor": {
       "label": "Video Editor",
-      "orangeHrmJobTitle": "Video Editor",
       "title": "Form 4 — Video Editor Performance Review",
       "items": [
         {
@@ -251,11 +262,16 @@
           "kpiTitle": "Revision quality",
           "fullEditorsOnly": false
         }
+      ],
+      "orangeHrmJobTitles": [
+        "Video Editor",
+        "Video Editor / Automation Engineer",
+        "Patreon Editor",
+        "Patreon BL/GL Editor and Ideator"
       ]
     },
     "uploader": {
       "label": "Uploader",
-      "orangeHrmJobTitle": "Uploader",
       "title": "Form 5 — Uploader Performance Review",
       "items": [
         {
@@ -300,11 +316,14 @@
           "kpiTitle": "Credential compliance",
           "fullEditorsOnly": false
         }
+      ],
+      "orangeHrmJobTitles": [
+        "Uploader",
+        "Spotify Uploader"
       ]
     },
     "cm": {
       "label": "Channel Manager",
-      "orangeHrmJobTitle": "Channel Manager",
       "title": "Form 6 — Channel Manager Performance Review",
       "items": [
         {
@@ -355,11 +374,15 @@
           "kpiTitle": "Contractor development",
           "fullEditorsOnly": false
         }
+      ],
+      "orangeHrmJobTitles": [
+        "Channel Manager",
+        "Patreon Manager",
+        "Spotify Manager"
       ]
     },
     "qa": {
       "label": "Quality Analyst",
-      "orangeHrmJobTitle": "Quality Analyst",
       "title": "Form 7 — Quality Analyst Performance Review",
       "items": [
         {
@@ -410,6 +433,9 @@
           "kpiTitle": "Zero post-publish errors",
           "fullEditorsOnly": false
         }
+      ],
+      "orangeHrmJobTitles": [
+        "Ideator / QA / TB"
       ]
     }
   },
@@ -536,5 +562,16 @@
       "kpiTitle": "Upward review — pooled average",
       "source": "upward"
     }
+  ],
+  "excludedJobTitles": [
+    "Accountant / Bookkeeper",
+    "Chief Executive Officer",
+    "HR Generalist",
+    "Actress",
+    "Music Producer",
+    "Asset Creator",
+    "Executive Assistant",
+    "General Virtual Assistant",
+    "Night Driving Footage / Multilogin Manager"
   ]
 }

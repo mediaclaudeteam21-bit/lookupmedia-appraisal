@@ -28,24 +28,27 @@ const dryRun = ohrm.cfg().dryRun && !force;
   let created = 0;
 
   for (const [key, role] of Object.entries(criteria.roles)) {
-    const jt = byName.get(role.orangeHrmJobTitle.trim().toLowerCase());
-    if (!jt) {
-      console.log(`\n✗ ${role.orangeHrmJobTitle} — no such job title in OrangeHRM. Add it, then run again.`);
-      continue;
-    }
-
     const titles = [...role.items.map((i) => i.kpiTitle), ...extras];
-    console.log(`\n${role.orangeHrmJobTitle} (job title id ${jt.id}) — ${titles.length} KPIs`);
+    console.log(`\n${role.label} scorecard — ${titles.length} KPIs on ${role.orangeHrmJobTitles.length} job title(s)`);
 
-    if (dryRun) {
-      titles.forEach((t) => console.log(`    would create: ${t}  [1–5]`));
-      continue;
+    for (const wanted of role.orangeHrmJobTitles) {
+      const jt = byName.get(wanted.trim().toLowerCase());
+      if (!jt) {
+        console.log(`  ✗ "${wanted}" — no such job title in OrangeHRM. Check the spelling and run again.`);
+        continue;
+      }
+      console.log(`  ${wanted} (id ${jt.id})`);
+
+      if (dryRun) {
+        titles.forEach((t) => console.log(`      would create: ${t}  [1–5]`));
+        continue;
+      }
+
+      const res = await ohrm.ensureKpis({ jobTitleId: jt.id, kpiTitles: titles });
+      res.created.forEach((k) => console.log(`      created: ${k.title}`));
+      if (res.reused.length) console.log(`      ${res.reused.length} already existed and were left alone.`);
+      created += res.created.length;
     }
-
-    const res = await ohrm.ensureKpis({ jobTitleId: jt.id, kpiTitles: titles });
-    res.created.forEach((k) => console.log(`    created: ${k.title}`));
-    if (res.reused.length) console.log(`    ${res.reused.length} already existed and were left alone.`);
-    created += res.created.length;
   }
 
   console.log('\n' + '─'.repeat(64));
