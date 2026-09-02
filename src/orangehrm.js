@@ -192,7 +192,7 @@ async function listJobTitles() {
 }
 
 async function listEmployees() {
-  const res = await get('/pim/employees', { limit: 0, includeEmployees: 'onlyCurrent' });
+  const res = await get('/pim/employees', { limit: 0, includeEmployees: 'onlyCurrent', model: 'detailed' });
   return (res.data || []).map((e) => ({
     empNumber: e.empNumber,
     employeeId: e.employeeId,
