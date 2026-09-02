@@ -275,25 +275,25 @@ async function putSupervisorEvaluation(reviewId, ratingsByKpiId, generalComment)
   const { rows } = await getSupervisorEvaluation(reviewId);
   const rowByKpi = new Map(rows.map((r) => [r.kpi?.id, r]));
 
-  const reviewers = [];
+  const ratings = [];
   for (const [kpiId, value] of ratingsByKpiId) {
     const row = rowByKpi.get(Number(kpiId));
-    reviewers.push({
-      id: row ? row.id : Number(kpiId),
+    ratings.push({
+      kpiId: Number(kpiId),
       rating: value.rating,
       comment: (value.comment || '').slice(0, 2000)
     });
   }
 
-  const payload = { reviewers, generalComment: (generalComment || '').slice(0, 2000) };
+  const payload = { ratings, generalComment: (generalComment || '').slice(0, 2000) };
   try {
     return await put(`/performance/reviews/${reviewId}/evaluation/supervisor`, payload);
   } catch (err) {
     if (err.status !== 422 && err.status !== 400) throw err;
     // Retry keyed by KPI id.
     const alt = {
-      reviewers: [...ratingsByKpiId].map(([kpiId, value]) => ({
-        id: Number(kpiId), rating: value.rating, comment: (value.comment || '').slice(0, 2000)
+      ratings: [...ratingsByKpiId].map(([kpiId, value]) => ({
+        kpiId: Number(kpiId), rating: value.rating, comment: (value.comment || '').slice(0, 2000)
       })),
       generalComment: payload.generalComment
     };
