@@ -306,7 +306,7 @@ async function finaliseReview(reviewId, { finalRating, finalComment, completedDa
     finalRating: String(finalRating),
     completedDate: asDate(completedDate || new Date()),
     finalComment: (finalComment || '').slice(0, 2000),
-    complete: 'true'
+    complete: true
   });
 }
 
