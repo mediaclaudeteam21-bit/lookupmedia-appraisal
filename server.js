@@ -151,7 +151,7 @@ app.post('/api/admin/sync-roster', requireAdmin, async (req, res) => {
       let supervisorEmpNumber = null;
       try {
         const sups = await ohrm.listSupervisors(p.empNumber);
-        supervisorEmpNumber = sups[0]?.empNumber ?? sups[0]?.employee?.empNumber ?? null;
+        supervisorEmpNumber = sups[0]?.supervisor?.empNumber ?? null;
       } catch { /* leave null — HR can pick a reviewer at push time */ }
       withSupervisors.push({ ...p, supervisorEmpNumber });
     }
