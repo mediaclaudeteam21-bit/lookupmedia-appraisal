@@ -32,7 +32,7 @@
     "peer": 2,
     "upward": 3
   },
-  "roles": {
+  "roles": {"audio":{"label":"Audio Producer","title":"Form 10 — Audio Producer Performance Review","items":[{"key":"c1","text":"Audio quality — dialogue, music, and effects are clean, clear, and free of noise, clipping, or distortion","kpiTitle":"Audio quality","fullEditorsOnly":false},{"key":"c2","text":"Mixing and balance — dialogue, music, and sound effects are balanced correctly with no element overpowering another","kpiTitle":"Mixing and balance","fullEditorsOnly":false},{"key":"c3","text":"Sync accuracy — audio is precisely synced to video with no drift or timing errors","kpiTitle":"Sync accuracy","fullEditorsOnly":false},{"key":"c4","text":"Technical compliance — delivered in the correct format, sample rate, and loudness standard","kpiTitle":"Technical compliance","fullEditorsOnly":false},{"key":"c5","text":"Timeliness — audio delivered before the upload deadline with no delays to the pipeline","kpiTitle":"Timeliness","fullEditorsOnly":false},{"key":"c6","text":"Revision responsiveness — corrections applied accurately and promptly following feedback","kpiTitle":"Revision responsiveness","fullEditorsOnly":false},{"key":"c7","text":"Asset management — source and stem files saved and stored correctly in the designated folder","kpiTitle":"Asset management","fullEditorsOnly":false}],"orangeHrmJobTitles":["Audio Producer"]},
     "ideator": {
       "label": "Ideator",
       "title": "Form 1 — Ideator Performance Review",
